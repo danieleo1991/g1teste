@@ -2,7 +2,14 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-const { Server } = require('socket.io');
+
+const { Server } = require('socket.io')(http, {
+  cors: {
+    origin: '*', // zezwala na połączenie z dowolnego źródła (np. Twoja gra lokalnie lub z innego hosta)
+    methods: ['GET', 'POST']
+  }
+});
+
 const io = new Server(server);
 
 const players = {};
