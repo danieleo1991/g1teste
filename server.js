@@ -17,11 +17,23 @@ const players = {};
 
 const monsters = [
 	{
+		id: 0,
+		hp: 100,
+		speed: 0.05
+	},
+	{
+		id: 1,
+		hp: 200,
+		speed: 2
+	}
+}
+
+const monsters_spawns = [
+	{
 		id: crypto.randomUUID(),
 		monster_id: 0,
 		position: { x: 0, y: 0.5, z: 20 },
 		direction: { x: 1, z: 0 },
-		speed: 0.03,
 		timer: 0
 	},
 	{
@@ -29,7 +41,6 @@ const monsters = [
 		monster_id: 0,
 		position: { x: 0, y: 0.5, z: 10 },
 		direction: { x: 1, z: 0 },
-		speed: 0.03,
 		timer: 0
 	},
 	{
@@ -37,7 +48,6 @@ const monsters = [
 		monster_id: 0,
 		position: { x: 0, y: 0.5, z: 30 },
 		direction: { x: 1, z: 0 },
-		speed: 0.03,
 		timer: 0
 	},
 	{
@@ -45,7 +55,13 @@ const monsters = [
 		monster_id: 0,
 		position: { x: 0, y: 0.5, z: 15 },
 		direction: { x: 1, z: 0 },
-		speed: 0.03,
+		timer: 0
+	},
+	{
+		id: crypto.randomUUID(),
+		monster_id: 1,
+		position: { x: 0, y: 0.5, z: 5 },
+		direction: { x: 1, z: 0 },
 		timer: 0
 	}
 ];
@@ -53,7 +69,7 @@ const monsters = [
 io.on('connection', (socket) => {
 	
 	socket.on('player_ready_to_play', () => {
-		socket.emit('monstersState', monsters);
+		socket.emit('monstersState', monsters_spawns);
 	});
 
 	socket.on('newPlayer', (data) => {
@@ -81,10 +97,10 @@ io.on('connection', (socket) => {
 
 setInterval(() => {
 	
-	monsters.forEach(monster => {
+	monsters_spawns.forEach(monster => {
 		
-		monster.position.x += monster.direction.x * monster.speed;
-		monster.position.z += monster.direction.z * monster.speed;
+		monster.position.x += monster.direction.x * monsters[monster.monster_id].speed;
+		monster.position.z += monster.direction.z * monsters[monster.monster_id].speed;
 
 		monster.timer += 100;
 		
@@ -97,7 +113,7 @@ setInterval(() => {
 		
 	});
 
-	io.emit('monstersUpdate', monsters);
+	io.emit('monstersUpdate', monsters_spawns);
   
 }, 100);
 
