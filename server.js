@@ -26,7 +26,7 @@ const monsters = [
 	{
 		id: crypto.randomUUID(),
 		monster_id: 0,
-		position: { x: 20, y: 0.5, z: 10 },
+		position: { x: 100, y: 0.5, z: 10 },
 		direction: { x: 1, z: 0 },
 		speed: 0.03,
 	},
@@ -47,20 +47,19 @@ const monsters = [
 ];
 
 io.on('connection', (socket) => {
-  
-	socket.emit('monstersState', monsters);
-  
-  
+	
+	socket.on('player_ready_to_play', () => {
+		socket.emit('monstersState', monsters);
+	});
 
-  socket.on('newPlayer', (data) => {
-    players[socket.id] = {
-      id: socket.id,
-      position: data.position
-    };
-
-    socket.emit('currentPlayers', players);
-    socket.broadcast.emit('newPlayerJoined', players[socket.id]);
-  });
+	socket.on('newPlayer', (data) => {
+		players[socket.id] = {
+			id: socket.id,
+			position: data.position
+		};
+		socket.emit('currentPlayers', players);
+		socket.broadcast.emit('newPlayerJoined', players[socket.id]);
+	});
 
   socket.on('updatePosition', (position) => {
     if (players[socket.id]) {
