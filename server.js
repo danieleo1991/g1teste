@@ -33,7 +33,9 @@ const pool = new Pool({
 });
 
 app.post('/login', async (req, res) => {
-	try {
+  try {
+    const { player_email, player_pass } = req.body; // ← TO BYŁO POTRZEBNE!
+
     const result = await pool.query(
       "SELECT * FROM players WHERE player_email = $1",
       [player_email]
