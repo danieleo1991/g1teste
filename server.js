@@ -26,7 +26,7 @@ const monsters = [
 		hp: 200,
 		speed: 2
 	}
-}
+]
 
 const monsters_spawns = [
 	{
