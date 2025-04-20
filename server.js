@@ -139,14 +139,14 @@ io.on('connection', (socket) => {
 		socket.broadcast.emit('newPlayerJoined', players[socket.id]);
 	});
 	
-	socket.on('dealDamageToPlayer', ({ targetId, amount }) => {
-		if (players[targetId]) {
-			players[targetId].hp -= amount;
-			if (players[targetId].hp < 0) players[targetId].hp = 0;
+	socket.on('dealDamageToPlayer', ({ id, damage }) => {
+		const target = players[id];
+		if (target) {
 			io.emit('playerHPUpdate', {
-				id: targetId,
-				hp: players[targetId].hp
+				id: id,
+				hp: Math.max(0, (target.hp || 100) - damage)
 			});
+			target.hp = Math.max(0, (target.hp || 100) - damage);
 		}
 	});
 	
