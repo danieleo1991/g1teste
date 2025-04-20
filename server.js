@@ -19,12 +19,12 @@ const monsters = [
 	{
 		id: 0,
 		hp: 100,
-		speed: 0.05
+		speed: 0.15
 	},
 	{
 		id: 1,
 		hp: 200,
-		speed: 2
+		speed: 0.3
 	}
 ]
 
@@ -32,35 +32,35 @@ const monsters_spawns = [
 	{
 		id: crypto.randomUUID(),
 		monster_id: 0,
-		position: { x: 0, y: 0.5, z: 20 },
+		position: { x: 0, y: 0.6, z: 20 },
 		direction: { x: 1, z: 0 },
 		timer: 0
 	},
 	{
 		id: crypto.randomUUID(),
 		monster_id: 0,
-		position: { x: 0, y: 0.5, z: 10 },
+		position: { x: 0, y: 0.6, z: 10 },
 		direction: { x: 1, z: 0 },
 		timer: 0
 	},
 	{
 		id: crypto.randomUUID(),
 		monster_id: 0,
-		position: { x: 0, y: 0.5, z: 30 },
+		position: { x: 0, y: 0.6, z: 30 },
 		direction: { x: 1, z: 0 },
 		timer: 0
 	},
 	{
 		id: crypto.randomUUID(),
 		monster_id: 0,
-		position: { x: 0, y: 0.5, z: 15 },
+		position: { x: 0, y: 0.6, z: 15 },
 		direction: { x: 1, z: 0 },
 		timer: 0
 	},
 	{
 		id: crypto.randomUUID(),
 		monster_id: 1,
-		position: { x: 0, y: 0.5, z: 5 },
+		position: { x: 0, y: 0.6, z: 5 },
 		direction: { x: 1, z: 0 },
 		timer: 0
 	}
@@ -88,11 +88,12 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('disconnect', () => {
-    console.log(`🔴 Użytkownik rozłączony: ${socket.id}`);
-    delete players[socket.id];
-    io.emit('playerDisconnected', socket.id);
-  });
+	socket.on('disconnect', () => {
+		console.log(`🔴 Użytkownik rozłączony: ${socket.id}`);
+		delete players[socket.id];
+		io.emit('playerDisconnected', socket.id);
+	});
+  
 });
 
 setInterval(() => {
