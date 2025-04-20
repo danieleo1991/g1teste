@@ -1,25 +1,39 @@
-const express = require('express');
-const app = express();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http, {
+const io = require('socket.io')(server, {
   cors: {
-    origin: '*', // zezwala na połączenie z dowolnego źródła (np. Twoja gra lokalnie lub z innego hosta)
-    methods: ['GET', 'POST']
+    origin: "*"
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const players = {};
 
 io.on('connection', (socket) => {
-  console.log('✅ Naaaaaaowy gracz połączony:', socket.id);
+  console.log(`🟢 Player connected: ${socket.id}`);
 
-  socket.emit('welcome', 'Witaj w grze online!');
+  // Tworzenie nowego gracza
+  players[socket.id] = {
+    x: 0,
+    y: 0,
+    z: 0
+  };
 
-  socket.on('disconnect', () => {
-    console.log('❌ Gracz rozłączony:', socket.id);
+  // Wyślij wszystkim info o nowym graczu
+  socket.broadcast.emit('playerJoined', { id: socket.id, ...players[socket.id] });
+
+  // Wyślij nowemu graczowi info o wszystkich innych
+  socket.emit('currentPlayers', players);
+
+  // Odbieraj pozycję gracza i przekazuj dalej
+  socket.on('updatePosition', (position) => {
+    if (players[socket.id]) {
+      players[socket.id] = position;
+      socket.broadcast.emit('updatePosition', { id: socket.id, position });
+    }
   });
-});
 
-http.listen(PORT, () => {
-  console.log(`🚀 Serwer działa na porcie ${PORT}`);
+  // Rozłączenie gracza
+  socket.on('disconnect', () => {
+    console.log(`🔴 Player disconnected: ${socket.id}`);
+    delete players[socket.id];
+    io.emit('playerDisconnected', socket.id);
+  });
 });
