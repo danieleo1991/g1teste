@@ -1,13 +1,18 @@
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
+app.use(cors({
+	origin: 'https://stepmedia.pl',
+	methods: ['GET', 'POST', 'PUT', 'DELETE'],
+	credentials: false
+}));
 app.use(express.json());
 
 const http = require('http');
 const crypto = require('crypto');
 const mysql = require('mysql2/promise');
 const server = http.createServer(app);
-const cors = require('cors');
 
 const { Server } = require('socket.io');
 
@@ -24,12 +29,6 @@ const pool = mysql.createPool({
 	password: 'mj3Idj||69>W_q74',
 	database: 'serwer351988_g1'
 });
-
-app.use(cors({
-	origin: '*',
-	methods: ['GET', 'POST', 'PUT', 'DELETE'],
-	credentials: false
-}));
 
 app.post('/login', async (req, res) => {
 	const { player_email, player_pass } = req.body;
