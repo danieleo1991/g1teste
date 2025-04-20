@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const http = require('http');
+const crypto = require('crypto');
 const server = http.createServer(app);
 
 const { Server } = require('socket.io'); // poprawnie importujemy klasę Server
@@ -16,7 +17,8 @@ const players = {};
 
 const monsters = [
 	{
-		id: 0,
+		id: crypto.randomUUID(),
+		monster_id: 0,
 		position: { x: 20, y: 0.1, z: 20 },
 		direction: { x: 1, z: 0 },
 		speed: 0.03,
