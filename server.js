@@ -7,6 +7,7 @@ const http = require('http');
 const crypto = require('crypto');
 const mysql = require('mysql2/promise');
 const server = http.createServer(app);
+const cors = require('cors');
 
 const { Server } = require('socket.io');
 
@@ -27,7 +28,7 @@ const pool = mysql.createPool({
 app.use(cors({
 	origin: '*',
 	methods: ['GET', 'POST', 'PUT', 'DELETE'],
-	credentials: true
+	credentials: false
 }));
 
 app.post('/login', async (req, res) => {
