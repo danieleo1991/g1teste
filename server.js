@@ -15,26 +15,19 @@ const io = new Server(server, {
 const players = {};
 
 const monsters = [
-  {
-    id: 1,
-    position: { x: 2, y: 0.6, z: 8 },
-    hp: 100
-  },
-  {
-    id: 2,
-    position: { x: 5, y: 0.6, z: 8 },
-    hp: 100
-  }
+	{
+		id: 1,
+		position: { x: 2, y: 0.6, z: 8 }
+	},
+	{
+		id: 2,
+		position: { x: 5, y: 0.6, z: 8 }
+	}
 ];
 
 io.on('connection', (socket) => {
-	
-	
-	
-  console.log(`🟢 Użytkownik połączony: ${socket.id}`);
   
-  
-  socket.emit('monstersState', monsters);
+	socket.emit('monstersState', monsters);
   
   
 
@@ -63,13 +56,14 @@ io.on('connection', (socket) => {
 });
 
 setInterval(() => {
-  // Przykład prostego chodzenia (losowe przesunięcia)
-  monsters.forEach(monster => {
-    monster.position.x += (Math.random() - 0.5) * 0.1;
-    monster.position.z += (Math.random() - 0.5) * 0.1;
-  });
+	
+	monsters.forEach(monster => {
+		monster.position.x += (Math.random() - 0.5) * 0.1;
+		monster.position.z += (Math.random() - 0.5) * 0.1;
+	});
 
-  io.emit('monstersUpdate', monsters);
+	io.emit('monstersUpdate', monsters);
+  
 }, 100);
 
 const PORT = process.env.PORT || 3000;
