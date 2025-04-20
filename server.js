@@ -95,6 +95,8 @@ setInterval(() => {
 			monster.direction.z = Math.sin(angle);
 		}
 		
+		console.log(monster.id + " idzie..." + monster.position);
+		
 	});
 
 	io.emit('monstersUpdate', monsters);
