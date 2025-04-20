@@ -24,6 +24,12 @@ const pool = mysql.createPool({
 	database: 'serwer351988_g1'
 });
 
+app.use(cors({
+	origin: '*',
+	methods: ['GET', 'POST', 'PUT', 'DELETE'],
+	credentials: true
+}));
+
 app.post('/login', async (req, res) => {
 	const { player_email, player_pass } = req.body;
 	const [rows] = await pool.query("SELECT * FROM players WHERE player_email = ?", [player_email]);
