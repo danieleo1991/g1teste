@@ -11,7 +11,7 @@ const io = require('socket.io')(http, {
 const PORT = process.env.PORT || 3000;
 
 io.on('connection', (socket) => {
-  console.log('✅ Nowy gracz połączony:', socket.id);
+  console.log('✅ Naaaaaaowy gracz połączony:', socket.id);
 
   socket.emit('welcome', 'Witaj w grze online!');
 
