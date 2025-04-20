@@ -19,30 +19,34 @@ const monsters = [
 	{
 		id: crypto.randomUUID(),
 		monster_id: 0,
-		position: { x: 20, y: 0.5, z: 20 },
+		position: { x: 0, y: 0.5, z: 20 },
 		direction: { x: 1, z: 0 },
 		speed: 0.03,
+		timer: 0
 	},
 	{
 		id: crypto.randomUUID(),
 		monster_id: 0,
-		position: { x: 100, y: 0.5, z: 10 },
+		position: { x: 0, y: 0.5, z: 10 },
 		direction: { x: 1, z: 0 },
 		speed: 0.03,
+		timer: 0
 	},
 	{
 		id: crypto.randomUUID(),
 		monster_id: 0,
-		position: { x: 20, y: 0.5, z: 30 },
+		position: { x: 0, y: 0.5, z: 30 },
 		direction: { x: 1, z: 0 },
 		speed: 0.03,
+		timer: 0
 	},
 	{
 		id: crypto.randomUUID(),
 		monster_id: 0,
-		position: { x: 20, y: 0.5, z: 15 },
+		position: { x: 0, y: 0.5, z: 15 },
 		direction: { x: 1, z: 0 },
 		speed: 0.03,
+		timer: 0
 	}
 ];
 
