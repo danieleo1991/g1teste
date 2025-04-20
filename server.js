@@ -139,7 +139,7 @@ io.on('connection', (socket) => {
 	});
 	
 	socket.on('createProjectile', (data) => {
-		socket.broadcast.emit('spawnProjectile', data);
+		io.emit('spawnProjectile', data);
 	});
 
 	socket.on('updatePosition', async (data) => {
