@@ -52,18 +52,22 @@ app.post('/login', async (req, res) => {
     }
 
     res.json({
-      success: true,
-      id: user.id,
-      position: {
-        x: user.x,
-        y: user.y,
-        z: user.z
-      }
+		success: true,
+		id: user.id,
+		position: {
+			x: user.x,
+			y: user.y,
+			z: user.z
+		}
     });
-  } catch (err) {
-    console.error("Błąd podczas logowania:", err);
-    res.status(500).json({ error: "Błąd serwera" });
-  }
+	
+	console.log("Zalogował się, ID: " + user.id);
+	
+	} catch (err) {
+		console.error("Błąd podczas logowania:", err);
+		res.status(500).json({ error: "Błąd serwera" });
+	}
+	
 });
 
 const players = {};
@@ -133,6 +137,10 @@ io.on('connection', (socket) => {
 		socket.emit('currentPlayers', players);
 		socket.broadcast.emit('newPlayerJoined', players[socket.id]);
 	});
+	
+	socket.on('createProjectile', (data) => {
+		socket.broadcast.emit('spawnProjectile', data);
+	});
 
 	socket.on('updatePosition', async (data) => {
 	  
@@ -150,7 +158,6 @@ io.on('connection', (socket) => {
 			});
 			
 			try {
-				console.log(data.x);
 				await pool.query("UPDATE players SET x = $1, y = $2, z = $3 WHERE id = $4", [data.x, data.y, data.z, data.id]);
 			}
 			catch (err) {
