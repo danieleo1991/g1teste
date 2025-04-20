@@ -132,10 +132,22 @@ io.on('connection', (socket) => {
 	socket.on('newPlayer', (data) => {
 		players[socket.id] = {
 			id: socket.id,
-			position: data.position
+			position: data.position,
+			hp: 100
 		};
 		socket.emit('currentPlayers', players);
 		socket.broadcast.emit('newPlayerJoined', players[socket.id]);
+	});
+	
+	socket.on('dealDamageToPlayer', ({ targetId, amount }) => {
+		if (players[targetId]) {
+			players[targetId].hp -= amount;
+			if (players[targetId].hp < 0) players[targetId].hp = 0;
+			io.emit('playerHPUpdate', {
+				id: targetId,
+				hp: players[targetId].hp
+			});
+		}
 	});
 	
 	socket.on('createProjectile', (data) => {
