@@ -17,7 +17,7 @@ const players = {};
 
 const monsters = [
 	{
-		id: 1,
+		id: crypto.randomUUID(),
 		monster_id: 0,
 		position: { x: 0, y: 0.5, z: 20 },
 		direction: { x: 1, z: 0 },
@@ -25,7 +25,7 @@ const monsters = [
 		timer: 0
 	},
 	{
-		id: 2,
+		id: crypto.randomUUID(),
 		monster_id: 0,
 		position: { x: 0, y: 0.5, z: 10 },
 		direction: { x: 1, z: 0 },
@@ -33,7 +33,7 @@ const monsters = [
 		timer: 0
 	},
 	{
-		id: 3,
+		id: crypto.randomUUID(),
 		monster_id: 0,
 		position: { x: 0, y: 0.5, z: 30 },
 		direction: { x: 1, z: 0 },
@@ -41,7 +41,7 @@ const monsters = [
 		timer: 0
 	},
 	{
-		id: 4,
+		id: crypto.randomUUID(),
 		monster_id: 0,
 		position: { x: 0, y: 0.5, z: 15 },
 		direction: { x: 1, z: 0 },
