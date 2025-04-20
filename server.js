@@ -53,7 +53,10 @@ const monsters = [
 io.on('connection', (socket) => {
 	
 	socket.on('player_ready_to_play', () => {
-		socket.emit('monstersState', monsters);
+		socket.emit('monstersState', monsters.map((m, i) => ({
+			id: i,
+			position: m.position
+		})));
 	});
 
 	socket.on('newPlayer', (data) => {
