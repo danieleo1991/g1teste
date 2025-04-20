@@ -17,9 +17,9 @@ const players = {};
 const monsters = [
 	{
 		id: 0,
-		position: { x: 2, y: 0.6, z: 8 },
+		position: { x: 20, y: 0.1, z: 20 },
 		direction: { x: 1, z: 0 },
-		speed: 0.02,
+		speed: 0.03,
 	}
 ];
 
