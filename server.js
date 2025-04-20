@@ -134,12 +134,31 @@ io.on('connection', (socket) => {
 		socket.broadcast.emit('newPlayerJoined', players[socket.id]);
 	});
 
-  socket.on('updatePosition', (position) => {
-    if (players[socket.id]) {
-      players[socket.id].position = position;
-      socket.broadcast.emit('playerMoved', { id: socket.id, position });
-    }
-  });
+	socket.on('updatePosition', async (data) => {
+	  
+		if (players[socket.id]) {
+			
+			players[socket.id].position = {
+				x: data.x,
+				y: data.y,
+				z: data.z
+			};
+	
+			socket.broadcast.emit('playerMoved', {
+				id: socket.id,
+				position: data
+			});
+			
+			try {
+				await pool.query("UPDATE players SET x = $1, y = $2, z = $3 WHERE id = $4", [data.x, data.y, data.z, data.id]);
+			}
+			catch (err) {
+				console.error("❌ Błąd przy zapisie pozycji do bazy:", err);
+			}
+		  
+		}
+	
+	});
 
 	socket.on('disconnect', () => {
 		console.log(`🔴 Użytkownik rozłączony: ${socket.id}`);
