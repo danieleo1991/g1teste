@@ -206,7 +206,11 @@ setInterval(() => {
 
 	});
 
-	io.emit('monstersUpdate', monsters_spawns);
+	io.emit('monstersUpdate', monsters.map(m => ({
+		id: m.id,
+		position: m.position,
+		hp: m.hp
+	})));
 
 }, 100);
 
