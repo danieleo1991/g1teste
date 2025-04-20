@@ -11,9 +11,9 @@ app.use(express.json());
 
 const http = require('http');
 const crypto = require('crypto');
-const mysql = require('mysql2/promise');
 const server = http.createServer(app);
 
+const { Pool } = require('pg');
 const { Server } = require('socket.io');
 
 const io = new Server(server, {
@@ -23,21 +23,45 @@ const io = new Server(server, {
 	}
 });
 
-const pool = mysql.createPool({
-	host: 'sql156.lh.pl',
-	user: 'serwer351988_g1',
-	password: 'mj3Idj||69>W_q74',
-	database: 'serwer351988_g1'
+const pool = new Pool({
+	user: 'g1_user',
+	host: 'dpg-d02hi2buibrs73at5820-a',
+	database: 'g1',
+	password: 'H9QYEitTuF0eQo1vTLVxCWJF2sNy5tdR',
+	port: 5432,
+	ssl: { rejectUnauthorized: false } // ważne na Render
 });
 
 app.post('/login', async (req, res) => {
-	const { player_email, player_pass } = req.body;
-	const [rows] = await pool.query("SELECT * FROM players WHERE player_email = ?", [player_email]);
-	if (!rows.length) return res.status(401).json({ error: "Brak użytkownika" });
-	const user = rows[0];
-	const match = player_pass === user.player_pass;
-	if (!match) return res.status(401).json({ error: "Błędne hasło" });
-	res.json({ success: true, id: user.id, position: { x: user.x, y: user.y, z: user.z } });
+	try {
+    const result = await pool.query(
+      "SELECT * FROM players WHERE player_email = $1",
+      [player_email]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: "Brak użytkownika" });
+    }
+
+    const user = result.rows[0];
+
+    if (player_pass !== user.player_pass) {
+      return res.status(401).json({ error: "Błędne hasło" });
+    }
+
+    res.json({
+      success: true,
+      id: user.id,
+      position: {
+        x: user.x,
+        y: user.y,
+        z: user.z
+      }
+    });
+  } catch (err) {
+    console.error("Błąd podczas logowania:", err);
+    res.status(500).json({ error: "Błąd serwera" });
+  }
 });
 
 const players = {};
