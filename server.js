@@ -12,17 +12,18 @@ io.on('connection', (socket) => {
 
   // Gdy nowy gracz dołącza
   socket.on('newPlayer', (data) => {
-    players[socket.id] = {
-      id: socket.id,
-      position: data.position
-    };
+  players[socket.id] = {
+    id: socket.id,
+    position: {
+      x: data.position.x,
+      y: data.position.y,
+      z: data.position.z
+    }
+  };
 
-    // Powiadom nowego gracza o innych graczach
-    socket.emit('currentPlayers', players);
-
-    // Powiadom innych graczy o nowym graczu
-    socket.broadcast.emit('newPlayerJoined', players[socket.id]);
-  });
+  socket.emit('currentPlayers', players); // wysyła poprawną strukturę
+  socket.broadcast.emit('newPlayerJoined', players[socket.id]); // też
+});
 
   // Gdy gracz się porusza
   socket.on('updatePosition', (position) => {
