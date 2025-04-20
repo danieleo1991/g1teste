@@ -177,25 +177,37 @@ io.on('connection', (socket) => {
 });
 
 setInterval(() => {
-	
+
+	const MAP_BOUND = 49;
+
 	monsters_spawns.forEach(monster => {
-		
+
 		monster.position.x += monster.direction.x * monsters[monster.monster_id].speed;
 		monster.position.z += monster.direction.z * monsters[monster.monster_id].speed;
 
-		monster.timer += 100;
+		if (
+			monster.position.x > MAP_BOUND || monster.position.x < -MAP_BOUND ||
+			monster.position.z > MAP_BOUND || monster.position.z < -MAP_BOUND
+		) {
+			monster.position.x -= monster.direction.x * monsters[monster.monster_id].speed;
+			monster.position.z -= monster.direction.z * monsters[monster.monster_id].speed;
+			const angle = Math.random() * Math.PI * 2;
+			monster.direction.x = Math.cos(angle);
+			monster.direction.z = Math.sin(angle);
+		}
 		
+		monster.timer += 100;
 		if (monster.timer >= 5000) {
 			monster.timer = 0;
 			const angle = Math.random() * Math.PI * 2;
 			monster.direction.x = Math.cos(angle);
 			monster.direction.z = Math.sin(angle);
 		}
-		
+
 	});
 
 	io.emit('monstersUpdate', monsters_spawns);
-  
+
 }, 100);
 
 const PORT = process.env.PORT || 3000;
