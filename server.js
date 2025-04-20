@@ -150,6 +150,7 @@ io.on('connection', (socket) => {
 			});
 			
 			try {
+				console.log("ZAPISAŁEM POZYCJE");
 				await pool.query("UPDATE players SET x = $1, y = $2, z = $3 WHERE id = $4", [data.x, data.y, data.z, data.id]);
 			}
 			catch (err) {
