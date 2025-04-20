@@ -1,7 +1,12 @@
 const express = require('express');
+
 const app = express();
+app.use(express.json());
+
 const http = require('http');
 const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+const mysql = require('mysql2/promise');
 const server = http.createServer(app);
 
 const { Server } = require('socket.io'); // poprawnie importujemy klasę Server
@@ -11,6 +16,22 @@ const io = new Server(server, {
     origin: '*',
     methods: ['GET', 'POST']
   }
+});
+
+const pool = mysql.createPool({
+	host: 'sql156.lh.pl', user: 'serwer351988_g1', password: 'mj3Idj||69>W_q74', database: 'serwer351988_g1'
+});
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  const [rows] = await pool.query("SELECT * FROM players WHERE player_email = ?", [email]);
+  if (!rows.length) return res.status(401).json({ error: "Brak użytkownika" });
+
+  const user = rows[0];
+  const match = await bcrypt.compare(password, user.password_hash);
+  if (!match) return res.status(401).json({ error: "Błędne hasło" });
+
+  res.json({ success: true, id: user.id, position: { x: user.x, y: user.y, z: user.z } });
 });
 
 const players = {};
