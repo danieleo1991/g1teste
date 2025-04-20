@@ -16,12 +16,8 @@ const players = {};
 
 const monsters = [
 	{
-		id: 1,
+		id: 0,
 		position: { x: 2, y: 0.6, z: 8 }
-	},
-	{
-		id: 2,
-		position: { x: 5, y: 0.6, z: 8 }
 	}
 ];
 
@@ -58,8 +54,19 @@ io.on('connection', (socket) => {
 setInterval(() => {
 	
 	monsters.forEach(monster => {
-		monster.position.x += (Math.random() - 0.5) * 0.1;
-		monster.position.z += (Math.random() - 0.5) * 0.1;
+		
+		monster.position.x += monster.direction.x * monster.speed;
+		monster.position.z += monster.direction.z * monster.speed;
+
+		monster.timer += 100;
+		
+		if (monster.timer >= 5000) {
+			monster.timer = 0;
+			const angle = Math.random() * Math.PI * 2;
+			monster.direction.x = Math.cos(angle);
+			monster.direction.z = Math.sin(angle);
+		}
+		
 	});
 
 	io.emit('monstersUpdate', monsters);
