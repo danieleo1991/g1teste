@@ -5,33 +5,33 @@ app.use(express.json());
 
 const http = require('http');
 const crypto = require('crypto');
-const bcrypt = require('bcrypt');
 const mysql = require('mysql2/promise');
 const server = http.createServer(app);
 
-const { Server } = require('socket.io'); // poprawnie importujemy klasę Server
+const { Server } = require('socket.io');
 
 const io = new Server(server, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
-  }
+	cors: {
+		origin: '*',
+		methods: ['GET', 'POST']
+	}
 });
 
 const pool = mysql.createPool({
-	host: 'sql156.lh.pl', user: 'serwer351988_g1', password: 'mj3Idj||69>W_q74', database: 'serwer351988_g1'
+	host: 'sql156.lh.pl',
+	user: 'serwer351988_g1',
+	password: 'mj3Idj||69>W_q74',
+	database: 'serwer351988_g1'
 });
 
 app.post('/login', async (req, res) => {
-  const { player_email, player_pass } = req.body;
-  const [rows] = await pool.query("SELECT * FROM players WHERE player_email = ?", [player_email]);
-  if (!rows.length) return res.status(401).json({ error: "Brak użytkownika" });
-
-  const user = rows[0];
- const match = player_pass === user.player_pass;
-  if (!match) return res.status(401).json({ error: "Błędne hasło" });
-
-  res.json({ success: true, id: user.id, position: { x: user.x, y: user.y, z: user.z } });
+	const { player_email, player_pass } = req.body;
+	const [rows] = await pool.query("SELECT * FROM players WHERE player_email = ?", [player_email]);
+	if (!rows.length) return res.status(401).json({ error: "Brak użytkownika" });
+	const user = rows[0];
+	const match = player_pass === user.player_pass;
+	if (!match) return res.status(401).json({ error: "Błędne hasło" });
+	res.json({ success: true, id: user.id, position: { x: user.x, y: user.y, z: user.z } });
 });
 
 const players = {};
