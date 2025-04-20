@@ -18,7 +18,8 @@ const monsters = [
 	{
 		id: 0,
 		position: { x: 2, y: 0.6, z: 8 },
-		direction: { x: 1, z: 0 }
+		direction: { x: 1, z: 0 },
+		speed: 0.02,
 	}
 ];
 
