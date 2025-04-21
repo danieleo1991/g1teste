@@ -191,13 +191,13 @@ setInterval(() => {
 		);
 		
 		if (distance < 0.6) {
-			io.emit('register_damage', { id: projectile.id });
+			socket.broadcast.emit('register_damage', { id: projectile.id });
 			delete projectiles[id];
 		}
 		
 	}
 	
-}, 20);
+}, 18);
 
 function handleDamage(socketId, damage) {
 	const player = players[socketId];
