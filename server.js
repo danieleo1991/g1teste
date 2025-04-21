@@ -151,9 +151,14 @@ setInterval(() => {
 }, 100);
 
 setInterval(() => {
+	
 	const speed = 0.3;
+	
 	for (const id in projectiles) {
+		
 		console.log(projectiles[id]);
+		console.log(players[projectiles[id].id]);
+		
 		const p = projectiles[id];
 		let target;
 		if (p.target_type === 'player') target = players[p.target_id];
@@ -184,6 +189,7 @@ setInterval(() => {
 			io.emit('projectileHit', { projectileId: p.id });
 		}
 	}
+	
 }, 50);
 
 function handleDamage(socketId, damage) {
