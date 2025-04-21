@@ -92,6 +92,7 @@ io.on('connection', (socket) => {
 		
 		const projectile = {
 			id: projectile_id,
+			from: socket.id,
 			start_position: data.start_position,
 			current_position: data.start_position,
 			target_id: data.target_id,
