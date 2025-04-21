@@ -91,11 +91,10 @@ io.on('connection', (socket) => {
 	});
 	
 	socket.on('register_damage', (data) => {
-		console.log(data);
+		console.log("TRAFIONE");
 	});
 	
 	socket.on('playerShoot', (data) => {
-		console.log("STRZELAM");
 		const projectileId = crypto.randomUUID();
 		const { from, skill, targetId, targetType, startPosition } = data;
 		const damage = skill === 'fireball' ? 40 : 30;
@@ -187,7 +186,6 @@ setInterval(() => {
 			(target.position.z - p.currentPosition.z) ** 2
 		);
 		if (distance < 0.6) {
-			console.log(`🔴 Pocisk trafił gracza ${p.targetId} za ${p.damage} dmg`);
 			handleDamage(p.targetId, p.damage);
 			delete projectiles[id];
 			io.emit('projectileHit', { projectileId: p.id });
@@ -196,11 +194,9 @@ setInterval(() => {
 }, 50);
 
 function handleDamage(socketId, damage) {
-	console.log("TRAFIŁEM - ODEJMUJE HP");
 	const player = players[socketId];
 	if (!player) return;
 	player.hp = Math.max(0, player.hp - damage);
-	console.log(`📉 Gracz ${socketId} otrzymał obrażenia, nowy HP: ${player.hp}`);
 	io.emit('playerHPUpdate', { id: socketId, hp: player.hp });
 	if (player.hp <= 0) {
 		const respawnPos = { x: 0, y: 0.6, z: 0 };
