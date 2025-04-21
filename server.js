@@ -168,7 +168,7 @@ setInterval(() => {
 		}
 		else if (projectile.target_type === 'monster') {
 			target = monsters_spawns.find(m => m.id === projectile.target_id);
-			current_position = projectile.position;
+			current_position = target.position;
 		}
 		
 		if (!target || !target.position || !current_position) {
