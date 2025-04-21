@@ -262,7 +262,7 @@ setInterval(() => {
 
 }, 100);
 
-setInterval(async () => {
+setInterval(() => {
 	const speed = 0.3;
 
 	for (const id in projectiles) {
@@ -297,12 +297,8 @@ setInterval(async () => {
 		);
 
 		if (distance < 0.6) {
-			const damage = p.skill === 'fireball' ? 40 : 30;
-			target.hp = Math.max(0, target.hp - damage);
-
-			io.emit('playerHPUpdate', { id: p.targetId, hp: target.hp });
-
-			pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [target.hp, p.targetId]);
+			
+			handleDamage(p.targetId, p.damage);
 
 			if (target.hp <= 0) {
 				const respawnPos = { x: 0, y: 0.6, z: 0 };
@@ -330,6 +326,38 @@ setInterval(async () => {
 
 	}
 }, 50);
+
+function handleDamage(socketId, damage) {
+	const player = players[socketId];
+	if (!player) return;
+
+	player.hp = Math.max(0, player.hp - damage);
+
+	// Emituj aktualizację HP NATYCHMIAST
+	io.emit('playerHPUpdate', { id: socketId, hp: player.hp });
+
+	// Jeśli gracz zginął – teleportuj i od razu emituj
+	if (player.hp <= 0) {
+		const respawnPos = { x: 0, y: 0.6, z: 0 };
+		player.position = { ...respawnPos };
+		player.hp = 100;
+
+		io.emit('playerRespawned', {
+			id: socketId,
+			position: respawnPos,
+			hp: 100
+		});
+	}
+
+	// Aktualizuj bazę w tle (ale bez czekania)
+	pool.query('UPDATE players SET hp = $1, x = $2, y = $3, z = $4 WHERE socket_id = $5', [
+		player.hp,
+		player.position.x,
+		player.position.y,
+		player.position.z,
+		socketId
+	]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
+}
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
