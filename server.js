@@ -85,6 +85,7 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('playerShoot', (data) => {
+		console.log("STRZELAM");
 		const projectileId = crypto.randomUUID();
 		const { from, skill, targetId, targetType, startPosition } = data;
 		const damage = skill === 'fireball' ? 40 : 30;
@@ -191,6 +192,7 @@ setInterval(() => {
 }, 50);
 
 function handleDamage(socketId, damage) {
+	console.log("TRAFIŁEM - ODEJMUJE HP");
 	const player = players[socketId];
 	if (!player) return;
 	player.hp = Math.max(0, player.hp - damage);
