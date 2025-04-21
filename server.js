@@ -75,6 +75,7 @@ app.post('/login', async (req, res) => {
 });
 
 const players = {};
+const projectiles = {};
 
 const monsters = [
 	{
