@@ -156,8 +156,20 @@ setInterval(() => {
 	
 	for (const id in projectiles) {
 		
+		let target;
+		const projectile = projectiles[id];
+		
 		console.log(projectiles[id]);
-		console.log(players[projectiles[id].id]);
+		console.log(players);
+		
+		if (projectile.target_type == 'player') {
+			target = players[p.target_id];
+		}
+		
+		
+		
+		
+		/*
 		
 		const p = projectiles[id];
 		let target;
@@ -188,6 +200,8 @@ setInterval(() => {
 			delete projectiles[id];
 			io.emit('projectileHit', { projectileId: p.id });
 		}
+		*/
+		
 	}
 	
 }, 50);
