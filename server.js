@@ -159,8 +159,6 @@ io.on('connection', (socket) => {
 				id: id,
 				hp: newHP
 			});
-			console.log("🎯 ZADANE: ", damage);
-			console.log("🎯 TRAFIŁ: ", target.id);
 			try {
 				await pool.query("UPDATE players SET hp = $1 WHERE socket_id = $2", [newHP, id]);
 			}
@@ -168,6 +166,26 @@ io.on('connection', (socket) => {
 				console.error("❌ Błąd przy zapisie HP do bazy:", err);
 			}
 		}
+	});
+	
+	socket.on('playerShoot', (data) => {
+		const projectileId = generateUniqueProjectileId();
+		const { from, skill, targetId, targetType, startPosition } = data;
+
+		const projectile = {
+			id: projectileId,
+			from,
+			skill,
+			targetId,
+			targetType,
+			startPosition,
+			currentPosition: { ...startPosition },
+			createdAt: Date.now()
+		};
+
+		projectiles[projectileId] = projectile;
+
+		io.emit('spawnProjectile', projectile);
 	});
 	
 	socket.on('createProjectile', (data) => {
@@ -241,6 +259,54 @@ setInterval(() => {
 	io.emit('monstersUpdate', monsters_spawns);
 
 }, 100);
+
+setInterval(() => {
+	const speed = 0.3;
+
+	for (const id in projectiles) {
+		const p = projectiles[id];
+
+		let target;
+		if (p.targetType === 'player') target = players[p.targetId];
+		if (!target) continue;
+
+		const pos = p.currentPosition;
+		const dir = {
+			x: target.position.x - pos.x,
+			y: target.position.y - pos.y,
+			z: target.position.z - pos.z
+		};
+
+		const length = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2);
+		const normalized = {
+			x: dir.x / length,
+			y: dir.y / length,
+			z: dir.z / length
+		};
+
+		p.currentPosition.x += normalized.x * speed;
+		p.currentPosition.y += normalized.y * speed;
+		p.currentPosition.z += normalized.z * speed;
+
+		const distance = Math.sqrt(
+			(target.position.x - p.currentPosition.x) ** 2 +
+			(target.position.y - p.currentPosition.y) ** 2 +
+			(target.position.z - p.currentPosition.z) ** 2
+		);
+
+		if (distance < 0.6) {
+			const damage = p.skill === 'fireball' ? 40 : 30;
+			target.hp = Math.max(0, target.hp - damage);
+
+			io.emit('playerHPUpdate', { id: p.targetId, hp: target.hp });
+
+			// (Opcjonalnie) zapis do bazy:
+			pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [target.hp, p.targetId]);
+
+			delete projectiles[id];
+		}
+	}
+}, 50);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
