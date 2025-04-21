@@ -228,7 +228,7 @@ setInterval(() => {
 		
 	}
 	
-}, 50);
+}, 1);
 
 function handleDamage(socketId, damage) {
 	const player = players[socketId];
