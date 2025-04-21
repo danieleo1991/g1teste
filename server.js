@@ -193,42 +193,9 @@ setInterval(() => {
 			delete projectiles[id];
 		}
 		
-		/*
-		
-		const p = projectiles[id];
-		let target;
-		if (p.target_type === 'player') target = players[p.target_id];
-		if (!target) continue;
-		const pos = p.currentPosition;
-		const dir = {
-			x: target.position.x - pos.x,
-			y: target.position.y - pos.y,
-			z: target.position.z - pos.z
-		};
-		const length = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2);
-		const normalized = {
-			x: dir.x / length,
-			y: dir.y / length,
-			z: dir.z / length
-		};
-		p.currentPosition.x += normalized.x * speed;
-		p.currentPosition.y += normalized.y * speed;
-		p.currentPosition.z += normalized.z * speed;
-		const distance = Math.sqrt(
-			(target.position.x - p.currentPosition.x) ** 2 +
-			(target.position.y - p.currentPosition.y) ** 2 +
-			(target.position.z - p.currentPosition.z) ** 2
-		);
-		if (distance < 0.6) {
-			handleDamage(p.target_id, p.damage);
-			delete projectiles[id];
-			io.emit('projectileHit', { projectileId: p.id });
-		}
-		*/
-		
 	}
 	
-}, 1);
+}, 33);
 
 function handleDamage(socketId, damage) {
 	const player = players[socketId];
