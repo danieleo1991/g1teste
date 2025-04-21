@@ -221,6 +221,7 @@ setInterval(() => {
 			
 			if (projectile.target_type == 'player') {
 				const player = players[projectile.target_id];
+				player.hp = Math.max(0, player.hp - 10);
 				pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [
 					player.hp,
 					player.id
