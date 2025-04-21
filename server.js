@@ -153,22 +153,32 @@ setInterval(() => {
 
 setInterval(() => {
 	
-	const speed = 0.3;
-	
 	for (const id in projectiles) {
 		
 		let target;
 		const projectile = projectiles[id];
 		
-		console.log(projectiles[id]);
-		console.log(players);
-		
 		if (projectile.target_type == 'player') {
 			target = players[projectile.target_id];
 		}
 		
+		const dir = {
+			x: target.position.x - pos.x,
+			y: target.position.y - pos.y,
+			z: target.position.z - pos.z
+		};
 		
+		const length = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2);
 		
+		const normalized = {
+			x: dir.x / length,
+			y: dir.y / length,
+			z: dir.z / length
+		};
+		
+		projectile.position.x += normalized.x * 0.3;
+		projectile.position.y += normalized.y * 0.3;
+		projectile.position.z += normalized.z * 0.3;
 		
 		/*
 		
