@@ -152,7 +152,7 @@ io.on('connection', (socket) => {
 	socket.on('dealDamageToPlayer', async ({ id, damage }) => {
 		const target = players[id];
 		if (target) {
-			const newHP = Math.max(0, (target.hp || 100) - damage);
+			const newHP = Math.max(0, target.hp - damage);
 			target.hp = newHP;
 
 			io.emit('playerHPUpdate', {
