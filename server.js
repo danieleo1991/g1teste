@@ -180,9 +180,12 @@ setInterval(() => {
 			(target.position.z - p.currentPosition.z) ** 2
 		);
 		if (distance < 0.6) {
-			console.log("💥 Pocisk trafił gracza:", p.targetId);
-			handleDamage(p.targetId, p.damage);
+			console.log(`🔴 Pocisk trafił gracza ${p.targetId} za ${p.damage} dmg`);
+			handleDamage(p.targetId, p.damage); // ← TU odejmujesz HP
 			delete projectiles[id];
+
+			// Emituj do wszystkich, żeby zniknął pocisk
+			io.emit('projectileHit', { projectileId: p.id });
 		}
 	}
 }, 50);
