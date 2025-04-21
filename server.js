@@ -173,13 +173,15 @@ io.on('connection', (socket) => {
 		const projectileId = crypto.randomUUID();
 		const { from, skill, targetId, targetType, startPosition } = data;
 
+		const damage = skill === 'fireball' ? 40 : 30;
+
 		const projectile = {
 			id: projectileId,
 			from,
 			skill,
 			targetId,
 			targetType,
-			damage: 40,
+			damage,
 			startPosition,
 			currentPosition: { ...startPosition },
 			createdAt: Date.now()
@@ -187,7 +189,14 @@ io.on('connection', (socket) => {
 
 		projectiles[projectileId] = projectile;
 
+		// Emituj do klientów, żeby pokazali pocisk
 		io.emit('spawnProjectile', projectile);
+
+		// 👉 OD RAZU TRAFIENIE jeżeli celem jest gracz
+		if (targetType === 'player') {
+			console.log(`🔴 Trafił gracza ${targetId} za ${damage} dmg`);
+			handleDamage(targetId, damage);
+		}
 	});
 	
 	socket.on('createProjectile', (data) => {
@@ -262,48 +271,7 @@ setInterval(() => {
 
 }, 100);
 
-setInterval(() => {
-	const speed = 0.3;
 
-	for (const id in projectiles) {
-		const p = projectiles[id];
-
-		let target;
-		if (p.targetType === 'player') target = players[p.targetId];
-		if (!target) continue;
-
-		const pos = p.currentPosition;
-		const dir = {
-			x: target.position.x - pos.x,
-			y: target.position.y - pos.y,
-			z: target.position.z - pos.z
-		};
-
-		const length = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2);
-		const normalized = {
-			x: dir.x / length,
-			y: dir.y / length,
-			z: dir.z / length
-		};
-
-		p.currentPosition.x += normalized.x * speed;
-		p.currentPosition.y += normalized.y * speed;
-		p.currentPosition.z += normalized.z * speed;
-
-		const distance = Math.sqrt(
-			(target.position.x - p.currentPosition.x) ** 2 +
-			(target.position.y - p.currentPosition.y) ** 2 +
-			(target.position.z - p.currentPosition.z) ** 2
-		);
-
-		if (distance < 0.6) {
-			console.log("trafił");
-			handleDamage(p.targetId, p.damage);
-			delete projectiles[id];
-		}
-
-	}
-}, 50);
 
 function handleDamage(socketId, damage) {
 	const player = players[socketId];
