@@ -218,6 +218,15 @@ setInterval(() => {
 		);
 		
 		if (distance < 0.6) {
+			
+			if (projectile.target_type == 'player') {
+				const player = players[projectile.target_id];
+				pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [
+					player.hp,
+					player.id
+				]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
+			}
+			
 			io.emit('register_damage', {
 				target_id: projectile.target_id,
 				target_type: projectile.target_type,
