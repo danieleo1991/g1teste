@@ -297,6 +297,7 @@ setInterval(() => {
 		);
 
 		if (distance < 0.6) {
+			console.log("trafił");
 			handleDamage(p.targetId, p.damage);
 			delete projectiles[id];
 		}
