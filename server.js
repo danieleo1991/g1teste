@@ -191,10 +191,10 @@ setInterval(() => {
 		);
 		
 		if (distance < 0.6) {
-			io.broadcast.emit('register_damage', { id: projectile.id });
+			io.emit('register_damage', { id: projectile.id });
 			delete projectiles[id];
 		}
-		
+		 
 	}
 	
 }, 18);
