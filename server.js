@@ -139,14 +139,23 @@ io.on('connection', (socket) => {
 		socket.broadcast.emit('newPlayerJoined', players[socket.id]);
 	});
 	
-	socket.on('dealDamageToPlayer', ({ id, damage }) => {
+	socket.on('dealDamageToPlayer', async ({ id, damage }) => {
 		const target = players[id];
 		if (target) {
+			const newHP = Math.max(0, (target.hp || 100) - damage);
+			target.hp = newHP;
+
 			io.emit('playerHPUpdate', {
 				id: id,
-				hp: Math.max(0, (target.hp || 100) - damage)
+				hp: newHP
 			});
-			target.hp = Math.max(0, (target.hp || 100) - damage);
+
+			try {
+				await pool.query("UPDATE players SET hp = $1 WHERE id = $2", [newHP, id]);
+			}
+			catch (err) {
+				console.error("❌ Błąd przy zapisie HP do bazy:", err);
+			}
 		}
 	});
 	
