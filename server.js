@@ -179,6 +179,7 @@ io.on('connection', (socket) => {
 			skill,
 			targetId,
 			targetType,
+			damage: 20,
 			startPosition,
 			currentPosition: { ...startPosition },
 			createdAt: Date.now()
