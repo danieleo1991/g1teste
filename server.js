@@ -171,6 +171,12 @@ setInterval(() => {
 			current_position = projectile.position;
 		}
 		
+		if (!target || !target.position || !current_position) {
+			console.warn(`❌ Nie znaleziono celu dla pocisku ${id}`, projectile);
+			delete projectiles[id];
+			continue;
+		}
+		
 		const dir = {
 			x: target.position.x - current_position.x,
 			y: target.position.y - current_position.y,
