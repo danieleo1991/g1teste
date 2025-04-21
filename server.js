@@ -99,7 +99,7 @@ io.on('connection', (socket) => {
 		};
 		
 		projectiles[projectile_id] = projectile;
-		socket.emit('use_skill', projectile);
+		io.emit('use_skill', projectile);
 		
 	});
 	
