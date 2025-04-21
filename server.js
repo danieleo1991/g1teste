@@ -104,10 +104,6 @@ io.on('connection', (socket) => {
 		io.emit('spawnProjectile', projectile);
 	});
 
-	socket.on('createProjectile', (data) => {
-		io.emit('spawnProjectile', data);
-	});
-
 	socket.on('updatePosition', async (data) => {
 		if (players[socket.id]) {
 			players[socket.id].position = { x: data.x, y: data.y, z: data.z };
@@ -182,10 +178,8 @@ setInterval(() => {
 		);
 		if (distance < 0.6) {
 			console.log(`🔴 Pocisk trafił gracza ${p.targetId} za ${p.damage} dmg`);
-			handleDamage(p.targetId, p.damage); // ← TU odejmujesz HP
+			handleDamage(p.targetId, p.damage);
 			delete projectiles[id];
-
-			// Emituj do wszystkich, żeby zniknął pocisk
 			io.emit('projectileHit', { projectileId: p.id });
 		}
 	}
