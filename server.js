@@ -84,9 +84,17 @@ io.on('connection', (socket) => {
 		}
 	});
 
+	// USE SKILL
 	socket.on('use_skill', (data) => {
 		
-		socket.emit('use_skill');
+		const projectile_id = crypto.randomUUID();
+		
+		const projectile = {
+			id: projectile_id,
+			start_position: data.start_position
+		};
+		
+		socket.emit('use_skill', projectile);
 		
 	});
 	
