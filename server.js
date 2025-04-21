@@ -76,10 +76,12 @@ io.on('connection', (socket) => {
 
 	socket.on('newPlayer', async (data) => {
 		
+		const result = await pool.query("SELECT hp FROM players WHERE id = $1", [data.id]);
+		
 		players[socket.id] = {
 			id: socket.id,
 			position: data.position,
-			hp: 100,
+			hp: result.rows[0]?.hp,
 			player_name: socket.id 
 		};
 		
@@ -88,7 +90,7 @@ io.on('connection', (socket) => {
 		socket.broadcast.emit('newPlayerJoined', {
 			id: socket.id,
 			position: data.position,
-			hp: 100,
+			hp: result.rows[0]?.hp,
 			player_name: socket.id
 		});
 		
