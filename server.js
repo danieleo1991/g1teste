@@ -12,6 +12,7 @@ app.use(express.json());
 const http = require('http');
 const crypto = require('crypto');
 const server = http.createServer(app);
+const port = process.env.PORT || 3000;
 
 const { Pool } = require('pg');
 const { Server } = require('socket.io');
@@ -195,7 +196,7 @@ setInterval(() => {
 		
 	}
 	
-}, 33);
+}, 1);
 
 function handleDamage(socketId, damage) {
 	const player = players[socketId];
@@ -221,7 +222,4 @@ function handleDamage(socketId, damage) {
 	]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
 }
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`🚀 Serwer działa na porcie ${PORT}`);
-});
+server.listen();
