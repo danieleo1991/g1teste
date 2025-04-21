@@ -163,9 +163,9 @@ setInterval(() => {
 		}
 		
 		const dir = {
-			x: target.position.x - pos.x,
-			y: target.position.y - pos.y,
-			z: target.position.z - pos.z
+			x: target.position.x - projectile.position.x,
+			y: target.position.y - projectile.position.y,
+			z: target.position.z - projectile.position.z
 		};
 		
 		const length = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2);
@@ -179,6 +179,12 @@ setInterval(() => {
 		projectile.position.x += normalized.x * 0.3;
 		projectile.position.y += normalized.y * 0.3;
 		projectile.position.z += normalized.z * 0.3;
+		
+		const distance = Math.sqrt(
+			(target.position.x - projectile.position.x) ** 2 +
+			(target.position.y - projectile.position.y) ** 2 +
+			(target.position.z - projectile.position.z) ** 2
+		);
 		
 		/*
 		
