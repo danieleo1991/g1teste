@@ -148,6 +148,7 @@ setInterval(() => {
 		}
 	});
 	io.emit('monstersUpdate', monsters_spawns);
+	
 }, 100);
 
 setInterval(() => {
@@ -163,7 +164,7 @@ setInterval(() => {
 		console.log(players);
 		
 		if (projectile.target_type == 'player') {
-			target = players[p.target_id];
+			target = players[projectile.target_id];
 		}
 		
 		
