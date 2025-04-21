@@ -96,27 +96,13 @@ io.on('connection', (socket) => {
 			target_type: data.target_type
 		};
 		
+		projectiles[projectile_id] = projectile;
 		socket.emit('use_skill', projectile);
 		
 	});
 	
-	socket.on('playerShoot', (data) => {
-		const projectileId = crypto.randomUUID();
-		const { from, skill, targetId, targetType, startPosition } = data;
-		const damage = skill === 'fireball' ? 40 : 30;
-		const projectile = {
-			id: projectileId,
-			from,
-			skill,
-			targetId,
-			targetType,
-			damage,
-			startPosition,
-			currentPosition: { ...startPosition },
-			createdAt: Date.now()
-		};
-		projectiles[projectileId] = projectile;
-		io.emit('spawnProjectile', projectile);
+	socket.on('register_damage', (data) => {
+		
 	});
 
 	socket.on('updatePosition', async (data) => {
