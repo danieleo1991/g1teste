@@ -33,37 +33,40 @@ const pool = new Pool({
 });
 
 app.post('/login', async (req, res) => {
-  try {
-    const { player_email, player_pass } = req.body; // ← TO BYŁO POTRZEBNE!
+	
+	try {
+		
+		const { player_email, player_pass } = req.body;
 
-    const result = await pool.query(
-      "SELECT * FROM players WHERE player_email = $1",
-      [player_email]
-    );
+		const result = await pool.query(
+		  "SELECT * FROM players WHERE player_email = $1",
+		  [player_email]
+		);
 
-    if (result.rows.length === 0) {
-      return res.status(401).json({ error: "Brak użytkownika" });
-    }
-
-    const user = result.rows[0];
-
-    if (player_pass !== user.player_pass) {
-      return res.status(401).json({ error: "Błędne hasło" });
-    }
-
-    res.json({
-		success: true,
-		id: user.id,
-		position: {
-			x: user.x,
-			y: user.y,
-			z: user.z
+		if (result.rows.length === 0) {
+			return res.status(401).json({ error: "Brak użytkownika" });
 		}
-    });
+
+		const user = result.rows[0];
+
+		if (player_pass !== user.player_pass) {
+			return res.status(401).json({ error: "Błędne hasło" });
+		}
+
+		res.json({
+			success: true,
+			id: user.id,
+			position: {
+				x: user.x,
+				y: user.y,
+				z: user.z
+			}
+		});
+		
+		console.log("Zalogował się, ID: " + user.id);
 	
-	console.log("Zalogował się, ID: " + user.id);
-	
-	} catch (err) {
+	}
+	catch (err) {
 		console.error("Błąd podczas logowania:", err);
 		res.status(500).json({ error: "Błąd serwera" });
 	}
@@ -137,6 +140,12 @@ io.on('connection', (socket) => {
 		};
 		socket.emit('currentPlayers', players);
 		socket.broadcast.emit('newPlayerJoined', players[socket.id]);
+		try {
+			await pool.query("UPDATE players SET socket_id = $1 WHERE id = $2", [socket.id, data.id]);
+		}
+		catch (err) {
+			console.error("❌ Błąd przy zapisie socket_id do bazy:", err);
+		}
 	});
 	
 	socket.on('dealDamageToPlayer', async ({ id, damage }) => {
@@ -151,7 +160,7 @@ io.on('connection', (socket) => {
 			});
 
 			try {
-				await pool.query("UPDATE players SET hp = $1 WHERE id = $2", [newHP, id]);
+				await pool.query("UPDATE players SET hp = $1 WHERE socket_id = $2", [newHP, id]);
 			}
 			catch (err) {
 				console.error("❌ Błąd przy zapisie HP do bazy:", err);
