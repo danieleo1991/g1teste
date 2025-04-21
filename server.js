@@ -262,7 +262,7 @@ setInterval(() => {
 
 }, 100);
 
-setInterval(() => {
+setInterval(async () => {
 	const speed = 0.3;
 
 	for (const id in projectiles) {
