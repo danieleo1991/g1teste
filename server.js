@@ -219,7 +219,7 @@ setInterval(() => {
 		
 		if (distance < 0.6) {
 			io.emit('register_damage', {
-				target_id: target.target_id,
+				target_id: projectile.target_id,
 				target_type: projectile.target_type,
 				damage: 10
 			});
