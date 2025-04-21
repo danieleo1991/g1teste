@@ -170,7 +170,7 @@ io.on('connection', (socket) => {
 	});
 	
 	socket.on('playerShoot', (data) => {
-		const projectileId = generateUniqueProjectileId();
+		const projectileId = crypto.randomUUID();
 		const { from, skill, targetId, targetType, startPosition } = data;
 
 		const projectile = {
