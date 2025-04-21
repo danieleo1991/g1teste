@@ -188,6 +188,11 @@ setInterval(() => {
 			(target.position.z - current_position.z) ** 2
 		);
 		
+		if (distance < 0.6) {
+			io.emit('register_damage', { id: projectile.id });
+			delete projectiles[id];
+		}
+		
 		/*
 		
 		const p = projectiles[id];
