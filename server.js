@@ -84,6 +84,16 @@ io.on('connection', (socket) => {
 		}
 	});
 
+	socket.on('use_skill', (data) => {
+		
+		console.log("UŻYTO SKILL");
+		
+	});
+	
+	socket.on('register_damage', (data) => {
+		console.log(data);
+	});
+	
 	socket.on('playerShoot', (data) => {
 		console.log("STRZELAM");
 		const projectileId = crypto.randomUUID();
