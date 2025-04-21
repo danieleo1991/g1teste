@@ -75,14 +75,30 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('newPlayer', async (data) => {
-		players[socket.id] = { id: socket.id, position: data.position, hp: 100 };
+		
+		players[socket.id] = {
+			id: socket.id,
+			position: data.position,
+			hp: 100,
+			player_name: socket.id 
+		};
+		
 		socket.emit('currentPlayers', players);
-		socket.broadcast.emit('newPlayerJoined', players[socket.id]);
+		
+		socket.broadcast.emit('newPlayerJoined', {
+			id: socket.id,
+			position: data.position,
+			hp: 100,
+			player_name: socket.id
+		});
+		
 		try {
 			await pool.query("UPDATE players SET socket_id = $1 WHERE id = $2", [socket.id, data.id]);
-		} catch (err) {
+		}
+		catch (err) {
 			console.error("❌ Błąd przy zapisie socket_id do bazy:", err);
 		}
+		
 	});
 
 	// USE SKILL
