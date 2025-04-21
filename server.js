@@ -191,7 +191,7 @@ setInterval(() => {
 		);
 		
 		if (distance < 0.6) {
-			socket.broadcast.emit('register_damage', { id: projectile.id });
+			io.broadcast.emit('register_damage', { id: projectile.id });
 			delete projectiles[id];
 		}
 		
