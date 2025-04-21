@@ -56,6 +56,7 @@ app.post('/login', async (req, res) => {
 		res.json({
 			success: true,
 			id: user.id,
+			hp: user.hp,
 			position: {
 				x: user.x,
 				y: user.y,
@@ -158,7 +159,8 @@ io.on('connection', (socket) => {
 				id: id,
 				hp: newHP
 			});
-
+			console.log("🎯 ZADANE: ", damage);
+			console.log("🎯 TRAFIŁ: ", target.id);
 			try {
 				await pool.query("UPDATE players SET hp = $1 WHERE socket_id = $2", [newHP, id]);
 			}
