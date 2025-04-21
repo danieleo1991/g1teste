@@ -309,6 +309,8 @@ function handleDamage(socketId, damage) {
 	if (!player) return;
 
 	player.hp = Math.max(0, player.hp - damage);
+	
+	console.log(`🔴 [SERVER] Gracz ${socketId} otrzymał obrażenia, nowy HP: ${player.hp}`);
 
 	// Emituj aktualizację HP NATYCHMIAST
 	io.emit('playerHPUpdate', { id: socketId, hp: player.hp });
