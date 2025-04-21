@@ -171,7 +171,7 @@ setInterval(() => {
 			current_position = target.position;
 		}
 		
-		if (!target || !target.position || !current_position) {
+		if (!target || !current_position) {
 			console.warn(`❌ Nie znaleziono celu dla pocisku ${id}`, projectile);
 			delete projectiles[id];
 			continue;
