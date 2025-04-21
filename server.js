@@ -92,7 +92,8 @@ io.on('connection', (socket) => {
 		const projectile = {
 			id: projectile_id,
 			start_position: data.start_position,
-			target_id: data.target_id
+			target_id: data.target_id,
+			target_type: data.target_type
 		};
 		
 		socket.emit('use_skill', projectile);
