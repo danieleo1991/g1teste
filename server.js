@@ -297,30 +297,7 @@ setInterval(() => {
 		);
 
 		if (distance < 0.6) {
-			
 			handleDamage(p.targetId, p.damage);
-
-			if (target.hp <= 0) {
-				const respawnPos = { x: 0, y: 0.6, z: 0 };
-				target.position = { ...respawnPos };
-				target.hp = 100;
-				
-				// Emitujemy teleportację do wszystkich
-				io.emit('playerRespawned', {
-					id: p.targetId,
-					position: respawnPos,
-					hp: 100
-				});
-
-				// Aktualizujemy bazę
-				pool.query('UPDATE players SET x = $1, y = $2, z = $3, hp = $4 WHERE socket_id = $5', [
-					respawnPos.x, respawnPos.y, respawnPos.z, 100, p.targetId
-				]).catch(err => {
-					console.error("❌ Błąd przy respawnie w bazie:", err);
-				});
-
-			}
-
 			delete projectiles[id];
 		}
 
