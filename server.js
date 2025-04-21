@@ -161,7 +161,7 @@ io.on('connection', (socket) => {
 				hp: newHP
 			});
 			try {
-				await pool.query("UPDATE players SET hp = $1 WHERE socket_id = $2", [newHP, id]);
+				pool.query("UPDATE players SET hp = $1 WHERE socket_id = $2", [newHP, id]);
 			}
 			catch (err) {
 				console.error("❌ Błąd przy zapisie HP do bazy:", err);
@@ -302,7 +302,7 @@ setInterval(async () => {
 
 			io.emit('playerHPUpdate', { id: p.targetId, hp: target.hp });
 
-			await pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [target.hp, p.targetId]);
+			pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [target.hp, p.targetId]);
 
 			if (target.hp <= 0) {
 				const respawnPos = { x: 0, y: 0.6, z: 0 };
