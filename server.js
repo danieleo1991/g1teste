@@ -156,7 +156,7 @@ setInterval(() => {
 		console.log(projectiles[id]);
 		const p = projectiles[id];
 		let target;
-		if (p.targetType === 'player') target = players[p.targetId];
+		if (p.target_type === 'player') target = players[p.target_id];
 		if (!target) continue;
 		const pos = p.currentPosition;
 		const dir = {
@@ -179,7 +179,7 @@ setInterval(() => {
 			(target.position.z - p.currentPosition.z) ** 2
 		);
 		if (distance < 0.6) {
-			handleDamage(p.targetId, p.damage);
+			handleDamage(p.target_id, p.damage);
 			delete projectiles[id];
 			io.emit('projectileHit', { projectileId: p.id });
 		}
