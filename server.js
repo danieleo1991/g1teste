@@ -159,11 +159,16 @@ setInterval(() => {
 	for (const id in projectiles) {
 		
 		let target;
+		let current_position;
 		const projectile = projectiles[id];
-		const current_position = projectile.current_position;
 		
 		if (projectile.target_type == 'player') {
 			target = players[projectile.target_id];
+			current_position = projectile.current_position;
+		}
+		else if (projectile.target_type === 'monster') {
+			target = monsters_spawns.find(m => m.id === projectile.target_id);
+			current_position = projectile.position;
 		}
 		
 		const dir = {
