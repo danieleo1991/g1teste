@@ -92,6 +92,7 @@ io.on('connection', (socket) => {
 		const projectile = {
 			id: projectile_id,
 			start_position: data.start_position,
+			current_position: { ...start_position },
 			target_id: data.target_id,
 			target_type: data.target_type
 		};
@@ -157,17 +158,16 @@ setInterval(() => {
 		
 		let target;
 		const projectile = projectiles[id];
-		
-		console.log(projectile);
+		const current_position = projectile.current_position;
 		
 		if (projectile.target_type == 'player') {
 			target = players[projectile.target_id];
 		}
 		
 		const dir = {
-			x: target.position.x - projectile.position.x,
-			y: target.position.y - projectile.position.y,
-			z: target.position.z - projectile.position.z
+			x: target.position.x - current_position.x,
+			y: target.position.y - current_position.y,
+			z: target.position.z - current_position.z
 		};
 		
 		const length = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2);
@@ -178,14 +178,14 @@ setInterval(() => {
 			z: dir.z / length
 		};
 		
-		projectile.position.x += normalized.x * 0.3;
-		projectile.position.y += normalized.y * 0.3;
-		projectile.position.z += normalized.z * 0.3;
+		current_position.x += normalized.x * 0.3;
+		current_position.y += normalized.y * 0.3;
+		current_position.z += normalized.z * 0.3;
 		
 		const distance = Math.sqrt(
-			(target.position.x - projectile.position.x) ** 2 +
-			(target.position.y - projectile.position.y) ** 2 +
-			(target.position.z - projectile.position.z) ** 2
+			(target.position.x - current_position.x) ** 2 +
+			(target.position.y - current_position.y) ** 2 +
+			(target.position.z - current_position.z) ** 2
 		);
 		
 		/*
