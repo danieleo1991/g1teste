@@ -132,7 +132,7 @@ io.on('connection', (socket) => {
 		socket.emit('monstersState', monsters_spawns);
 	});
 
-	socket.on('newPlayer', (data) => {
+	socket.on('newPlayer', async (data) => {
 		players[socket.id] = {
 			id: socket.id,
 			position: data.position,
