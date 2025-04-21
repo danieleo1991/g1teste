@@ -222,4 +222,4 @@ function handleDamage(socketId, damage) {
 	]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
 }
 
-server.listen();
+server.listen(port);
