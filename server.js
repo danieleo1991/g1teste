@@ -86,12 +86,8 @@ io.on('connection', (socket) => {
 
 	socket.on('use_skill', (data) => {
 		
-		console.log("UŻYTO SKILL");
+		socket.emit('use_skill');
 		
-	});
-	
-	socket.on('register_damage', (data) => {
-		console.log("TRAFIONE");
 	});
 	
 	socket.on('playerShoot', (data) => {
