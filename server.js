@@ -155,7 +155,7 @@ io.on('connection', (socket) => {
 		if (target) {
 			const newHP = Math.max(0, target.hp - damage);
 			target.hp = newHP;
-
+			console.log('emit HP')
 			io.emit('playerHPUpdate', {
 				id: id,
 				hp: newHP
