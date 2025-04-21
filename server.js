@@ -153,6 +153,7 @@ setInterval(() => {
 setInterval(() => {
 	const speed = 0.3;
 	for (const id in projectiles) {
+		console.log(projectiles[id]);
 		const p = projectiles[id];
 		let target;
 		if (p.targetType === 'player') target = players[p.targetId];
