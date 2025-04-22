@@ -103,6 +103,13 @@ io.on('connection', (socket) => {
 		}
 		
 	});
+	
+	socket.on('chat_message', (msg) => {
+		io.emit('chat_message', {
+			sender: players[socket.id]?.player_name,
+			message: msg
+		});
+	});
 
 	// USE SKILL
 	socket.on('use_skill', (data) => {
