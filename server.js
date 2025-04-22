@@ -104,11 +104,22 @@ io.on('connection', (socket) => {
 		
 	});
 	
-	socket.on('chat_message', (msg) => {
-		io.emit('chat_message', {
-			sender: players[socket.id]?.player_name,
-			message: msg
-		});
+	socket.on('chat_message', async (msg) => {
+		try {
+			await pool.query("INSERT INTO chat_messages (message_from, message_from_player_name, message, message_to, message_to_player_name) VALUES ($1, $2, $3, NULL, NULL)",
+			[
+				socket.id,
+				players[socket.id]?.player_name,
+				msg
+			]);
+			io.emit('chat_message', {
+				sender: players[socket.id]?.player_name,
+				message: msg
+			});
+		}
+		catch (err) {
+			console.error("❌ Błąd przy obsłudze wiadomości czatu:", err);
+		}
 	});
 
 	// USE SKILL
