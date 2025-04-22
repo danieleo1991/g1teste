@@ -167,7 +167,7 @@ io.on('connection', (socket) => {
 			return;
 		}
 
-		last_use_skill[socket.id][skill_name] = now;
+		skill_last_use[socket.id][skill_name] = now;
 		
 		const projectile_id = crypto.randomUUID();
 		
