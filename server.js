@@ -222,12 +222,32 @@ setInterval(() => {
 		if (distance < 0.6) {
 			
 			if (projectile.target_type == 'player') {
+				
 				const player = players[projectile.target_id];
 				player.hp = Math.max(0, player.hp - 10);
 				pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [
 					player.hp,
 					player.id
 				]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
+				
+				if (player.hp <= 0) {
+					const respawn_position = { x: 0, y: 0.6, z: 0 };
+					player.hp = 100;
+					player.position = { ...respawn_position };
+					io.emit('player_respawned', {
+						id: projectile.target_id,
+						position: { ...respawn_position },
+						hp: player.hp
+					});
+					pool.query('UPDATE players SET hp = $1, x = $2, y = $3, z = $4 WHERE socket_id = $5', [
+						player.hp,
+						player.position.x,
+						player.position.y,
+						player.position.z,
+						projectile.target_id
+					]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
+				}
+				
 			}
 			
 			io.emit('register_damage', {
@@ -235,6 +255,7 @@ setInterval(() => {
 				target_type: projectile.target_type,
 				damage: 10
 			});
+			
 			delete projectiles[id];
 		}
 		 
