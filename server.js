@@ -64,7 +64,7 @@ const skill_last_use = {};
 const skills = {
 	attack: {
 		damage: 10,
-		cooldown: 2000
+		cooldown: 1000
 	},
 	fireball: {
 		damage: 30,
@@ -162,10 +162,7 @@ io.on('connection', (socket) => {
 		const last_use_skill = skill_last_use[socket.id][skill_name] || 0;
 		const skill_cooldown = skills[skill_name].cooldown;
 
-		if (now - last_use_skill < skill_cooldown) {
-			console.log(`❌ ${skill_name} jeszcze w cooldownie dla gracza ${socket.id}`);
-			return;
-		}
+		if (now - last_use_skill < skill_cooldown) return;
 
 		skill_last_use[socket.id][skill_name] = now;
 		
