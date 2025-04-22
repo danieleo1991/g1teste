@@ -77,7 +77,7 @@ io.on('connection', (socket) => {
 
 	socket.on('newPlayer', async (data) => {
 		
-		const result = pool.query("SELECT hp FROM players WHERE id = $1", [data.id]);
+		const result = await pool.query("SELECT hp, player_name FROM players WHERE id = $1", [data.id]);
 		const player_name = result.rows[0]?.player_name;
 		players[socket.id] = {
 			id: socket.id,
