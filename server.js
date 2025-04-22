@@ -71,8 +71,17 @@ const monsters_spawns = [
 ];
 
 io.on('connection', (socket) => {
-	socket.on('player_ready_to_play', () => {
-		socket.emit('monstersState', monsters_spawns);
+	
+	socket.on('player_ready_to_play', async () => {
+		try {
+			const result = await pool.query("SELECT message_from_player_name, message FROM chat_messages ORDER BY message_id DESC LIMIT 10");
+			const messages = result.rows.reverse();
+			socket.emit('chat_history', messages);
+			socket.emit('monstersState', monsters_spawns);
+
+		} catch (err) {
+			console.error("❌ Błąd przy pobieraniu historii czatu:", err);
+		}
 	});
 
 	socket.on('newPlayer', async (data) => {
