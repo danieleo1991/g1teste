@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
 			id: socket.id,
 			position: data.position,
 			hp: result.rows[0]?.hp,
-			player_name: player_name
+			player_name: "aaaaaaa"
 		};
 		
 		socket.emit('currentPlayers', players);
