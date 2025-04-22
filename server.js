@@ -58,6 +58,23 @@ app.post('/login', async (req, res) => {
 const players = {};
 const projectiles = {};
 const terrain_objects = {};
+const skill_cooldowns = {};
+const skill_last_use = {};
+
+const skills = {
+	attack: {
+		damage: 10,
+		cooldown: 2000
+	},
+	fireball: {
+		damage: 30,
+		cooldown: 3000
+	},
+	heal: {
+		damage: -20,
+		cooldown: 5000
+	}
+};
 
 const monsters = [
 	{ id: 0, hp: 100, speed: 0.15 },
@@ -136,6 +153,22 @@ io.on('connection', (socket) => {
 	// USE SKILL
 	socket.on('use_skill', (data) => {
 		
+		const skill_name = data.skill_name;
+		
+		if (!skills[skill_name]) return;
+		if (!skill_last_use[socket.id]) skill_last_use[socket.id] = {};
+		
+		const now = Date.now();
+		const last_use_skill = skill_last_use[socket.id][skill_name] || 0;
+		const skill_cooldown = skills[skill_name].cooldown;
+
+		if (now - last_use_skill < skill_cooldown) {
+			console.log(`❌ ${skill} jeszcze w cooldownie dla gracza ${socket.id}`);
+			return;
+		}
+
+		last_use_skill[socket.id][skill_name] = now;
+		
 		const projectile_id = crypto.randomUUID();
 		
 		const projectile = {
@@ -144,7 +177,8 @@ io.on('connection', (socket) => {
 			start_position: data.start_position,
 			current_position: data.start_position,
 			target_id: data.target_id,
-			target_type: data.target_type
+			target_type: data.target_type,
+			skill_name: skill_name
 		};
 		
 		projectiles[projectile_id] = projectile;
@@ -284,7 +318,7 @@ setInterval(() => {
 			io.emit('register_damage', {
 				target_id: projectile.target_id,
 				target_type: projectile.target_type,
-				damage: 10
+				damage: skills[projectile.skill_name]?.damage
 			});
 			
 			delete projectiles[id];
@@ -293,29 +327,5 @@ setInterval(() => {
 	}
 	
 }, 20);
-
-function handleDamage(socketId, damage) {
-	const player = players[socketId];
-	if (!player) return;
-	player.hp = Math.max(0, player.hp - damage);
-	io.emit('playerHPUpdate', { id: socketId, hp: player.hp });
-	if (player.hp <= 0) {
-		const respawnPos = { x: 0, y: 0.6, z: 0 };
-		player.position = { ...respawnPos };
-		player.hp = 100;
-		io.emit('playerRespawned', {
-			id: socketId,
-			position: respawnPos,
-			hp: 100
-		});
-	}
-	pool.query('UPDATE players SET hp = $1, x = $2, y = $3, z = $4 WHERE socket_id = $5', [
-		player.hp,
-		player.position.x,
-		player.position.y,
-		player.position.z,
-		socketId
-	]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
-}
 
 server.listen(port);
