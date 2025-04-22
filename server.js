@@ -44,6 +44,7 @@ app.post('/login', async (req, res) => {
 			success: true,
 			id: user.id,
 			hp: user.hp,
+			player_name: user.player_name,
 			position: { x: user.x, y: user.y, z: user.z }
 		});
 		console.log("Zalogował się, ID: " + user.id);
@@ -77,12 +78,12 @@ io.on('connection', (socket) => {
 	socket.on('newPlayer', async (data) => {
 		
 		const result = await pool.query("SELECT hp FROM players WHERE id = $1", [data.id]);
-		
+		const player_name = result.rows[0]?.player_name;
 		players[socket.id] = {
 			id: socket.id,
 			position: data.position,
 			hp: result.rows[0]?.hp,
-			player_name: socket.id 
+			player_name: player_name
 		};
 		
 		socket.emit('currentPlayers', players);
@@ -91,7 +92,7 @@ io.on('connection', (socket) => {
 			id: socket.id,
 			position: data.position,
 			hp: result.rows[0]?.hp,
-			player_name: socket.id
+			player_name: player_name
 		});
 		
 		try {
