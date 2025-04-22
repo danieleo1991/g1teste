@@ -163,7 +163,7 @@ io.on('connection', (socket) => {
 		const skill_cooldown = skills[skill_name].cooldown;
 
 		if (now - last_use_skill < skill_cooldown) {
-			console.log(`❌ ${skill} jeszcze w cooldownie dla gracza ${socket.id}`);
+			console.log(`❌ ${skill_name} jeszcze w cooldownie dla gracza ${socket.id}`);
 			return;
 		}
 
