@@ -11,6 +11,7 @@ app.use(express.json());
 
 const http = require('http');
 const crypto = require('crypto');
+const { Vector3, Raycaster } = require('three');
 const server = http.createServer(app);
 const port = process.env.PORT || 3000;
 
@@ -56,6 +57,7 @@ app.post('/login', async (req, res) => {
 
 const players = {};
 const projectiles = {};
+const terrain_objects = {};
 
 const monsters = [
 	{ id: 0, hp: 100, speed: 0.15 },
