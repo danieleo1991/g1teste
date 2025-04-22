@@ -236,6 +236,7 @@ setInterval(() => {
 					player.position = { ...respawn_position };
 					io.emit('player_respawned', {
 						id: projectile.target_id,
+						projectile_id, projectile.id,
 						position: { ...respawn_position },
 						hp: player.hp
 					});
