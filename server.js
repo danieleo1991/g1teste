@@ -261,7 +261,7 @@ io.on('connection', (socket) => {
 
 		const start_position = {
 			x: attacker.position.x,
-			y: attacker.position.y + 1.2,
+			y: attacker.position.y + 6,
 			z: attacker.position.z
 		};
 
