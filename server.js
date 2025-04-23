@@ -339,8 +339,6 @@ io.on('connection', (socket) => {
 		
 		let FROMPLAYERPOS = target = players[socket.id].position.y;
 		let TOPLAYERPOS = target = players[data.target_id].position.y;
-		console.log("OD POZYCJI GRACZA:", FROMPLAYERPOS);
-		console.log("DO POZYCJI GRACZA:", TOPLAYERPOS);
 		
 
 		projectiles[projectile.id] = projectile;
@@ -457,7 +455,8 @@ setInterval(() => {
 		const dy = target.position.y - projectile.current_position.y;
 		const dz = target.position.z - projectile.current_position.z;
 		const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
+		console.log(distance);
+		
 		if (distance < 0.6) {
 			
 			console.log("DYSTANS WYKRYTY");
