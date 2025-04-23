@@ -321,7 +321,7 @@ io.on('connection', (socket) => {
 		const attacker = players[socket.id];
 		if (!attacker) return;
 		
-		const start_position: {
+		const start_position = {
 			x: players[socket.id].position.x,
 			y: players[socket.id].position.y,
 			z: players[socket.id].position.z
