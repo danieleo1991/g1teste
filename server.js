@@ -444,12 +444,17 @@ setInterval(() => {
 
 		if (distance < 0.6) {
 			
+			console.log("Leci...");
+			
 			const obstructed = isLineObstructed(projectile.current_position, targetCenter);
 			if (obstructed) {
 				console.log("❌ Zablokowany przez przeszkodę!");
 				io.emit('projectileHit', { projectileId: projectile.id });
 				delete projectiles[id];
 				continue;
+			}
+			else {
+				console.log("brak...");
 			}
 			
 			const attacker = players[projectile.from];
