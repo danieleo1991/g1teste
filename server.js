@@ -135,10 +135,8 @@ function isLineObstructed(start, end) {
 }
 
 function lineIntersectsBox(start, end, min, max) {
-	// Algorytm Liang-Barsky / slab method
 	let tmin = 0.0;
 	let tmax = 1.0;
-
 	const delta = {
 		x: end.x - start.x,
 		y: end.y - start.y,
@@ -147,7 +145,11 @@ function lineIntersectsBox(start, end, min, max) {
 
 	const check = (axis) => {
 		if (Math.abs(delta[axis]) < 1e-6) {
-			return start[axis] >= min[axis] && start[axis] <= max[axis];
+			const inside = start[axis] >= min[axis] && start[axis] <= max[axis];
+			if (!inside) {
+				console.log(`❌ ${axis} poza zakresem: ${start[axis]} vs [${min[axis]}, ${max[axis]}]`);
+			}
+			return inside;
 		}
 		const ood = 1.0 / delta[axis];
 		let t1 = (min[axis] - start[axis]) * ood;
@@ -158,7 +160,11 @@ function lineIntersectsBox(start, end, min, max) {
 		return tmax >= tmin;
 	};
 
-	return check('x') && check('y') && check('z');
+	const result = check('x') && check('y') && check('z');
+	if (result) {
+		console.log("✅ TRAFIŁO W OBIEKT");
+	}
+	return result;
 }
 
 function checkProjectileCollision(position) {
