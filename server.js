@@ -411,31 +411,33 @@ setInterval(() => {
 
 setInterval(() => {
 	for (const id in projectiles) {
+		
 		const projectile = projectiles[id];
+			
+		const attacker = players[projectile.from];
+		if (!attacker) {
+			delete projectiles[id];
+			continue;
+		}
 		
 		let target;
+		
 		if (projectile.target_type === 'player') {
 			target = players[projectile.target_id];
-		} else if (projectile.target_type === 'monster') {
+		}
+		else if (projectile.target_type === 'monster') {
 			target = monsters_spawns.find(m => m.id === projectile.target_id);
 		}
 
 		if (!target || !projectile.current_position) {
-			console.warn(`❌ Nie znaleziono celu dla pocisku ${id}`, projectile);
 			delete projectiles[id];
 			continue;
 		}
 
-		const targetCenter = {
-			x: target.position.x,
-			y: target.position.y + 1.2,
-			z: target.position.z
-		};
-
 		const dir = {
-			x: targetCenter.x - projectile.current_position.x,
-			y: targetCenter.y - projectile.current_position.y,
-			z: targetCenter.z - projectile.current_position.z
+			x: target.position.x - projectile.current_position.x,
+			y: target.position.y - projectile.current_position.y,
+			z: target.position.z - projectile.current_position.z
 		};
 
 		const length = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2);
@@ -445,19 +447,11 @@ setInterval(() => {
 			z: dir.z / length
 		};
 
-		const next_position = {
-			x: projectile.current_position.x + normalized.x * 0.3,
-			y: projectile.current_position.y + normalized.y * 0.3,
-			z: projectile.current_position.z + normalized.z * 0.3
-		};
-
-		if (checkProjectileCollision(next_position)) {
+		if (checkProjectileCollision(current_position)) {
 			io.emit('projectileHit', { projectileId: projectile.id });
 			delete projectiles[id];
 			continue;
 		}
-
-		projectile.current_position = next_position;
 		
 		if (!projectiles[id]) continue;
 
@@ -491,12 +485,6 @@ setInterval(() => {
 			}
 			else {
 				console.log("brak...");
-			}
-			
-			const attacker = players[projectile.from];
-			if (!attacker) {
-				delete projectiles[id];
-				continue;
 			}
 
 			const baseAttack = attacker?.attack ?? 10;
