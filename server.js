@@ -320,15 +320,17 @@ io.on('connection', (socket) => {
 
 		const attacker = players[socket.id];
 		if (!attacker) return;
+		
+		const start_position: {
+			x: players[socket.id].position.x,
+			y: players[socket.id].position.y,
+			z: players[socket.id].position.z
+		};
 
 		const projectile = {
 			id: crypto.randomUUID(),
 			from: socket.id,
-			position: {
-				x: players[socket.id].position.x,
-				y: players[socket.id].position.y,
-				z: players[socket.id].position.z
-			},
+			start_position,
 			current_position: { ...start_position },
 			target_id: data.target_id,
 			target_type: data.target_type,
