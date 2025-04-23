@@ -255,9 +255,29 @@ io.on('connection', (socket) => {
 		
 	});
 	
-	socket.on('playerInput', (inputs) => {
-		if (players[socket.id]) {
-			players[socket.id].inputs = inputs;
+	socket.on('playerInput', (input) => {
+		const player = players[socket.id];
+		if (!player) return;
+
+		const speed = 0.08;
+		const direction = { x: 0, z: 0 };
+
+		if (input.forward) direction.z -= 1;
+		if (input.backward) direction.z += 1;
+		if (input.left) direction.x -= 1;
+		if (input.right) direction.x += 1;
+
+		const length = Math.sqrt(direction.x**2 + direction.z**2);
+		if (length > 0) {
+			direction.x /= length;
+			direction.z /= length;
+
+			player.position.x += direction.x * speed;
+			player.position.z += direction.z * speed;
+
+			// (opcjonalnie: ogranicz do mapy, np. 50x50)
+			player.position.x = Math.max(-50, Math.min(50, player.position.x));
+			player.position.z = Math.max(-50, Math.min(50, player.position.z));
 		}
 	});
 	
