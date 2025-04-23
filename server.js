@@ -209,14 +209,14 @@ io.on('connection', (socket) => {
 
 	socket.on('newPlayer', async (data) => {
 		
-		const result = await pool.query("SELECT hp, player_name, attack, crit FROM players WHERE id = $1", [data.id]);
+		const result = await pool.query("SELECT * FROM players WHERE id = $1", [data.id]);
 		const player_name = result.rows[0]?.player_name;
 		players[socket.id] = {
 			id: socket.id,
 			position: {
-				x: row.x ?? 0,
-				y: row.y ?? 0.6,
-				z: row.z ?? 0
+				x: result.rows[0].x ?? 0,
+				y: result.rows[0].y ?? 0.6,
+				z: result.rows[0].z ?? 0
 			},
 			hp: result.rows[0]?.hp,
 			player_name: player_name,
