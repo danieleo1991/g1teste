@@ -221,16 +221,7 @@ io.on('connection', (socket) => {
 			hp: result.rows[0]?.hp,
 			player_name: player_name,
 			attack: result.rows[0]?.attack ?? 10,
-			crit: result.rows[0]?.crit ?? 5,
-			velocityY: 0,
-			isJumping: false,
-			inputs: {
-				forward: false,
-				backward: false,
-				left: false,
-				right: false,
-				jump: false
-			}
+			crit: result.rows[0]?.crit ?? 5
 		};
 		
 		socket.emit('currentPlayers', players);
@@ -253,32 +244,6 @@ io.on('connection', (socket) => {
 			console.error("❌ Błąd przy zapisie socket_id do bazy:", err);
 		}
 		
-	});
-	
-	socket.on('playerInput', (input) => {
-		const player = players[socket.id];
-		if (!player) return;
-
-		const speed = 0.08;
-		const direction = { x: 0, z: 0 };
-
-		if (input.forward) direction.z -= 1;
-		if (input.backward) direction.z += 1;
-		if (input.left) direction.x -= 1;
-		if (input.right) direction.x += 1;
-
-		const length = Math.sqrt(direction.x**2 + direction.z**2);
-		if (length > 0) {
-			direction.x /= length;
-			direction.z /= length;
-
-			player.position.x += direction.x * speed;
-			player.position.z += direction.z * speed;
-
-			// (opcjonalnie: ogranicz do mapy, np. 50x50)
-			player.position.x = Math.max(-50, Math.min(50, player.position.x));
-			player.position.z = Math.max(-50, Math.min(50, player.position.z));
-		}
 	});
 	
 	socket.on('chat_message', async (msg) => {
@@ -352,15 +317,6 @@ io.on('connection', (socket) => {
 });
 
 setInterval(() => {
-	
-	const state = {};
-	for (const id in players) {
-		state[id] = {
-			position: players[id].position
-		};
-	}
-	io.emit('playersStateUpdate', state);
-	
 	const MAP_BOUND = 49;
 	monsters_spawns.forEach(monster => {
 		monster.position.x += monster.direction.x * monsters[monster.monster_id].speed;
@@ -385,7 +341,7 @@ setInterval(() => {
 	});
 	io.emit('monstersUpdate', monsters_spawns);
 	
-}, 50);
+}, 100);
 
 setInterval(() => {
 	for (const id in projectiles) {
