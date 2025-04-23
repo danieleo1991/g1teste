@@ -370,7 +370,7 @@ setInterval(() => {
 				target_id: projectile.target_id,
 				target_type: projectile.target_type,
 				damage: damage,
-				isCrit: isCrit
+				crit: isCrit
 			});
 			
 			delete projectiles[id];
