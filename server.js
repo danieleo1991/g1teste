@@ -83,6 +83,7 @@ const monsters = [
 
 const mapObjects = require('./map_objects.json');
 
+/*
 const monsters_spawns = [
 	{ id: crypto.randomUUID(), monster_id: 0, position: { x: 0, y: 0.6, z: 20 }, direction: { x: 1, z: 0 }, timer: 0 },
 	{ id: crypto.randomUUID(), monster_id: 0, position: { x: 0, y: 0.6, z: 10 }, direction: { x: 1, z: 0 }, timer: 0 },
@@ -90,6 +91,8 @@ const monsters_spawns = [
 	{ id: crypto.randomUUID(), monster_id: 0, position: { x: 0, y: 0.6, z: 15 }, direction: { x: 1, z: 0 }, timer: 0 },
 	{ id: crypto.randomUUID(), monster_id: 1, position: { x: 0, y: 0.6, z: 5 }, direction: { x: 1, z: 0 }, timer: 0 }
 ];
+*/
+const monsters_spawns = [];
 
 function checkProjectileCollision(position) {
 	for (const obj of mapObjects) {
@@ -326,6 +329,12 @@ setInterval(() => {
 			
 			let isCrit = false;
 			const attacker = players[projectile.from];
+			
+			if (!attacker) {
+				delete projectiles[id];
+				return;
+			}
+			
 			const baseAttack = attacker?.attack ?? 10;
 			const critChance = attacker?.crit ?? 5;
 			let damage = Math.floor(baseAttack * (0.5 + Math.random() * 0.5));
