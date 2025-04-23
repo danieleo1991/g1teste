@@ -463,6 +463,8 @@ setInterval(() => {
 
 		if (distance < 0.6) {
 			
+			console.log("DYSTANS WYKRYTY");
+			
 			const from = {
 				x: projectile.current_position.x,
 				y: projectile.current_position.y + 0.5, // 👈 było +1.2 – spróbuj mniej
