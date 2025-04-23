@@ -453,7 +453,13 @@ setInterval(() => {
 		const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 		console.log(distance);
 		
-		if (distance < 3) {
+		projectile.current_position = {
+			x: projectile.current_position.x + normalized.x * 0.3,
+			y: projectile.current_position.y + normalized.y * 0.3,
+			z: projectile.current_position.z + normalized.z * 0.3
+		};
+		
+		if (distance < 0.6) {
 			
 			console.log("DYSTANS WYKRYTY");
 			
