@@ -81,6 +81,22 @@ const monsters = [
 	{ id: 1, hp: 200, speed: 0.3 }
 ];
 
+const mapObjects = [
+	{
+		id: 'wall1',
+		type: 'box',
+		position: { x: 35, y: 0, z: 5 },
+		size: { x: 4, y: 4, z: 0.5 } // szerokość, wysokość, głębokość
+	},
+	{
+		id: 'building1',
+		type: 'box',
+		position: { x: -10, y: 0, z: 10 },
+		size: { x: 8, y: 6, z: 8 }
+	}
+	// możesz dodać więcej przeszkód
+];
+
 const monsters_spawns = [
 	{ id: crypto.randomUUID(), monster_id: 0, position: { x: 0, y: 0.6, z: 20 }, direction: { x: 1, z: 0 }, timer: 0 },
 	{ id: crypto.randomUUID(), monster_id: 0, position: { x: 0, y: 0.6, z: 10 }, direction: { x: 1, z: 0 }, timer: 0 },
@@ -88,6 +104,37 @@ const monsters_spawns = [
 	{ id: crypto.randomUUID(), monster_id: 0, position: { x: 0, y: 0.6, z: 15 }, direction: { x: 1, z: 0 }, timer: 0 },
 	{ id: crypto.randomUUID(), monster_id: 1, position: { x: 0, y: 0.6, z: 5 }, direction: { x: 1, z: 0 }, timer: 0 }
 ];
+
+function checkProjectileCollision(position) {
+	for (const obj of mapObjects) {
+		const halfSize = {
+			x: obj.size.x / 2,
+			y: obj.size.y / 2,
+			z: obj.size.z / 2
+		};
+
+		const min = {
+			x: obj.position.x - halfSize.x,
+			y: obj.position.y,
+			z: obj.position.z - halfSize.z
+		};
+
+		const max = {
+			x: obj.position.x + halfSize.x,
+			y: obj.position.y + obj.size.y,
+			z: obj.position.z + halfSize.z
+		};
+
+		if (
+			position.x >= min.x && position.x <= max.x &&
+			position.y >= min.y && position.y <= max.y &&
+			position.z >= min.z && position.z <= max.z
+		) {
+			return true; // trafiono w przeszkodę
+		}
+	}
+	return false;
+}
 
 io.on('connection', (socket) => {
 	
@@ -97,7 +144,7 @@ io.on('connection', (socket) => {
 			const messages = result.rows.reverse();
 			socket.emit('chat_history', messages);
 			socket.emit('monstersState', monsters_spawns);
-
+			socket.emit('map_objects', mapObjects);
 		} catch (err) {
 			console.error("❌ Błąd przy pobieraniu historii czatu:", err);
 		}
@@ -279,6 +326,12 @@ setInterval(() => {
 			(target.position.y - current_position.y) ** 2 +
 			(target.position.z - current_position.z) ** 2
 		);
+		
+		if (checkProjectileCollision(current_position)) {
+			io.emit('projectileHit', { projectileId: projectile.id }); // usuń u klienta
+			delete projectiles[id]; // usuń z serwera
+			continue; // pomiń dalsze przetwarzanie
+		}
 		
 		if (distance < 0.6) {
 			
