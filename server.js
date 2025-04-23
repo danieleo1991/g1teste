@@ -343,14 +343,11 @@ io.on('connection', (socket) => {
 		const dz = data.z - player.last_position.z;
 		const distance = Math.sqrt(dx * dx + dz * dz);
 
-		const maxDistance = 0.3; // 🧱 max 0.3 jednostki na tick
+		const maxDistance = 0.3;
 
 		const blocked = isPositionBlocked(data.x, data.z);
 
-		if (distance > maxDistance || blocked) {
-			console.warn(`❌ Podejrzany ruch od gracza ${socket.id} – odległość ${distance.toFixed(2)}, kolizja: ${blocked}`);
-			return; // ❌ zignoruj ruch
-		}
+		if (distance > maxDistance || blocked) return;
 
 		player.position = { x: data.x, y: data.y, z: data.z };
 		player.last_position = { x: data.x, y: data.y, z: data.z };
@@ -417,7 +414,7 @@ setInterval(() => {
 
 		const dir = {
 			x: target.position.x - projectile.current_position.x,
-			y: target.position.y - projectile.current_position.y,
+			y: target.position.y + 2 - projectile.current_position.y + 2,
 			z: target.position.z - projectile.current_position.z
 		};
 
@@ -514,16 +511,5 @@ setInterval(() => {
 		}
 	}
 }, 20);
-
-setInterval(() => {
-	for (const socketId in players) {
-		const player = players[socketId];
-		io.to(socketId).emit('positionCorrection', {
-			x: player.position.x,
-			y: player.position.y,
-			z: player.position.z
-		});
-	}
-}, 5000);
 
 server.listen(port);
