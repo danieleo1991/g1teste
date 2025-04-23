@@ -215,7 +215,7 @@ io.on('connection', (socket) => {
 			current_position: { ...start_position },
 			target_id: data.target_id,
 			target_type: data.target_type,
-			skill_name: skill_name
+			skill_name: data.skill_name
 		};
 
 		projectiles[projectile.id] = projectile;
