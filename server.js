@@ -309,6 +309,12 @@ setInterval(() => {
 			z: dir.z / length
 		};
 		
+		if (checkProjectileCollision(current_position)) {
+			io.emit('projectileHit', { projectileId: projectile.id });
+			delete projectiles[id];
+			continue;
+		}
+		
 		current_position.x += normalized.x * 0.3;
 		current_position.y += normalized.y * 0.3;
 		current_position.z += normalized.z * 0.3;
@@ -318,12 +324,6 @@ setInterval(() => {
 			(target.position.y - current_position.y) ** 2 +
 			(target.position.z - current_position.z) ** 2
 		);
-		
-		if (checkProjectileCollision(current_position)) {
-			io.emit('projectileHit', { projectileId: projectile.id }); // usuń u klienta
-			delete projectiles[id]; // usuń z serwera
-			continue; // pomiń dalsze przetwarzanie
-		}
 		
 		if (distance < 0.6) {
 			
