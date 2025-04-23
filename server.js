@@ -221,7 +221,16 @@ io.on('connection', (socket) => {
 			hp: result.rows[0]?.hp,
 			player_name: player_name,
 			attack: result.rows[0]?.attack ?? 10,
-			crit: result.rows[0]?.crit ?? 5
+			crit: result.rows[0]?.crit ?? 5,
+			velocityY: 0,
+			isJumping: false,
+			inputs: {
+				forward: false,
+				backward: false,
+				left: false,
+				right: false,
+				jump: false
+			}
 		};
 		
 		socket.emit('currentPlayers', players);
@@ -244,6 +253,12 @@ io.on('connection', (socket) => {
 			console.error("❌ Błąd przy zapisie socket_id do bazy:", err);
 		}
 		
+	});
+	
+	socket.on('playerInput', (inputs) => {
+		if (players[socket.id]) {
+			players[socket.id].inputs = inputs;
+		}
 	});
 	
 	socket.on('chat_message', async (msg) => {
@@ -317,6 +332,42 @@ io.on('connection', (socket) => {
 });
 
 setInterval(() => {
+	
+	for (const id in players) {
+		const player = players[id];
+		const speed = 0.1;
+		const gravity = -0.05;
+		const jumpPower = 1;
+
+		let moveX = 0;
+		let moveZ = 0;
+
+		if (player.inputs.forward) moveZ -= speed;
+		if (player.inputs.backward) moveZ += speed;
+		if (player.inputs.left) moveX -= speed;
+		if (player.inputs.right) moveX += speed;
+
+		// Zakładamy domyślnie pozycję y=0 jako podłoże
+		if (player.inputs.jump && !player.isJumping) {
+			player.velocityY = jumpPower;
+			player.isJumping = true;
+		}
+
+		player.velocityY += gravity;
+		player.position.y += player.velocityY;
+
+		if (player.position.y <= 0.6) {
+			player.position.y = 0.6;
+			player.velocityY = 0;
+			player.isJumping = false;
+		}
+
+		player.position.x += moveX;
+		player.position.z += moveZ;
+	}
+
+	io.emit('playersStateUpdate', players);
+	
 	const MAP_BOUND = 49;
 	monsters_spawns.forEach(monster => {
 		monster.position.x += monster.direction.x * monsters[monster.monster_id].speed;
@@ -341,7 +392,7 @@ setInterval(() => {
 	});
 	io.emit('monstersUpdate', monsters_spawns);
 	
-}, 100);
+}, 50);
 
 setInterval(() => {
 	for (const id in projectiles) {
