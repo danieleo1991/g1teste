@@ -323,7 +323,7 @@ io.on('connection', (socket) => {
 		
 		const start_position = {
 			x: players[socket.id].position.x,
-			y: players[socket.id].position.y,
+			y: players[socket.id].position.y + 3,
 			z: players[socket.id].position.z
 		};
 
@@ -451,7 +451,6 @@ setInterval(() => {
 		const dy = target.position.y - projectile.current_position.y;
 		const dz = target.position.z - projectile.current_position.z;
 		const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-		console.log(distance);
 		
 		projectile.current_position = {
 			x: projectile.current_position.x + normalized.x * 0.3,
@@ -460,8 +459,6 @@ setInterval(() => {
 		};
 		
 		if (distance < 0.6) {
-			
-			console.log("DYSTANS WYKRYTY");
 
 			const obstructed = isLineObstructed(projectile.current_position, target.position);
 			
