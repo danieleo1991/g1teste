@@ -213,7 +213,11 @@ io.on('connection', (socket) => {
 		const player_name = result.rows[0]?.player_name;
 		players[socket.id] = {
 			id: socket.id,
-			position: data.position,
+			position: {
+				x: row.x ?? 0,
+				y: row.y ?? 0.6,
+				z: row.z ?? 0
+			},
 			hp: result.rows[0]?.hp,
 			player_name: player_name,
 			attack: result.rows[0]?.attack ?? 10,
@@ -354,7 +358,7 @@ setInterval(() => {
 
 		const dir = {
 			x: target.position.x - projectile.current_position.x,
-			y: target.position.y + 2 - projectile.current_position.y,
+			y: target.position.y - projectile.current_position.y,
 			z: target.position.z - projectile.current_position.z
 		};
 
@@ -367,7 +371,7 @@ setInterval(() => {
 
 		const next_position = {
 			x: projectile.current_position.x + normalized.x * 0.3,
-			y: projectile.current_position.y + 2 + normalized.y * 0.3,
+			y: projectile.current_position.y + normalized.y * 0.3,
 			z: projectile.current_position.z + normalized.z * 0.3
 		};
 
@@ -385,7 +389,7 @@ setInterval(() => {
 
 		const distance = Math.sqrt(
 			(target.position.x - next_position.x) ** 2 +
-			(target.position.y + 2 - next_position.y) ** 2 +
+			(target.position.y - next_position.y) ** 2 +
 			(target.position.z - next_position.z) ** 2
 		);
 
@@ -418,10 +422,7 @@ setInterval(() => {
 				const player = players[projectile.target_id];
 				player.hp = Math.max(0, player.hp - damage);
 
-				pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [
-					player.hp,
-					player.id
-				]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
+				pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [player.hp, player.id]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
 
 				if (player.hp <= 0) {
 					const respawn_position = { x: 0, y: 0.6, z: 0 };
