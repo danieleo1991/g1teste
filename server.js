@@ -81,7 +81,7 @@ const monsters = [
 	{ id: 1, hp: 200, speed: 0.3 }
 ];
 
-const mapObjects = require('./map.json');
+const mapObjects = require('./map_objects.json');
 
 const monsters_spawns = [
 	{ id: crypto.randomUUID(), monster_id: 0, position: { x: 0, y: 0.6, z: 20 }, direction: { x: 1, z: 0 }, timer: 0 },
