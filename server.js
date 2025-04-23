@@ -309,11 +309,20 @@ setInterval(() => {
 			z: dir.z / length
 		};
 		
-		if (checkProjectileCollision(current_position)) {
+		const next_position = {
+			x: current_position.x + normalized.x * 0.3,
+			y: current_position.y + normalized.y * 0.3,
+			z: current_position.z + normalized.z * 0.3
+		};
+		
+		// ❌ Zatrzymaj, jeśli trafia w ścianę
+		if (checkProjectileCollision(next_position)) {
 			io.emit('projectileHit', { projectileId: projectile.id });
 			delete projectiles[id];
 			continue;
 		}
+		
+		projectile.current_position = next_position;
 		
 		current_position.x += normalized.x * 0.3;
 		current_position.y += normalized.y * 0.3;
