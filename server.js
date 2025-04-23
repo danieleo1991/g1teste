@@ -210,8 +210,7 @@ io.on('connection', (socket) => {
 		const projectile = {
 			id: projectile_id,
 			from: data.from,
-			start_position: data.start_position,
-			current_position: data.start_position,
+			position: { ...data.start_position },
 			target_id: data.target_id,
 			target_type: data.target_type,
 			skill_name: skill_name
@@ -273,97 +272,95 @@ setInterval(() => {
 }, 100);
 
 setInterval(() => {
-	
 	for (const id in projectiles) {
-		
-		let target;
-		let current_position;
 		const projectile = projectiles[id];
-		
-		if (projectile.target_type == 'player') {
+		const current_position = projectile.position;
+
+		let target;
+
+		if (projectile.target_type === 'player') {
 			target = players[projectile.target_id];
-			current_position = projectile.current_position;
-		}
-		else if (projectile.target_type === 'monster') {
+		} else if (projectile.target_type === 'monster') {
 			target = monsters_spawns.find(m => m.id === projectile.target_id);
-			current_position = target.position;
 		}
-		
-		if (!target || !current_position) {
+
+		if (!target || !target.position) {
 			console.warn(`❌ Nie znaleziono celu dla pocisku ${id}`, projectile);
 			delete projectiles[id];
 			continue;
 		}
-		
+
 		const dir = {
 			x: target.position.x - current_position.x,
 			y: target.position.y - current_position.y,
 			z: target.position.z - current_position.z
 		};
-		
-		const length = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2);
-		
+
+		const length = Math.sqrt(dir.x ** 2 + dir.y ** 2 + dir.z ** 2);
+
 		const normalized = {
 			x: dir.x / length,
 			y: dir.y / length,
 			z: dir.z / length
 		};
-		
-		current_position.x += normalized.x * 0.3;
-		current_position.y += normalized.y * 0.3;
-		current_position.z += normalized.z * 0.3;
-		
-		const distance = Math.sqrt(
-			(target.position.x - current_position.x) ** 2 +
-			(target.position.y - current_position.y) ** 2 +
-			(target.position.z - current_position.z) ** 2
-		);
-		
-		if (checkProjectileCollision(current_position)) {
-			io.emit('projectileHit', { projectileId: projectile.id }); // usuń u klienta
-			delete projectiles[id]; // usuń z serwera
-			continue; // pomiń dalsze przetwarzanie
+
+		// 🧱 Kolizja ze ścianą PRZED aktualizacją pozycji
+		const next_position = {
+			x: current_position.x + normalized.x * 0.3,
+			y: current_position.y + normalized.y * 0.3,
+			z: current_position.z + normalized.z * 0.3
+		};
+
+		if (checkProjectileCollision(next_position)) {
+			io.emit('projectileHit', { projectileId: projectile.id });
+			delete projectiles[id];
+			continue;
 		}
-		
+
+		// 🟢 Aktualizuj pozycję dopiero po sprawdzeniu kolizji
+		projectile.position = next_position;
+
+		const distance = Math.sqrt(
+			(target.position.x - projectile.position.x) ** 2 +
+			(target.position.y - projectile.position.y) ** 2 +
+			(target.position.z - projectile.position.z) ** 2
+		);
+
 		if (distance < 0.6) {
-			
-			let isCrit = false;
 			const attacker = players[projectile.from];
-			
 			if (!attacker) {
 				delete projectiles[id];
-				return;
+				continue;
 			}
-			
-			const baseAttack = attacker?.attack ?? 10;
-			const critChance = attacker?.crit ?? 5;
-			let damage = Math.floor(baseAttack * (0.5 + Math.random() * 0.5));
 
-			if (Math.random() * 100 < critChance) {
-				damage *= 2;
-				isCrit = true;
-			}
-			
-			if (projectile.target_type == 'player') {
-				
+			const baseAttack = attacker.attack ?? 10;
+			const critChance = attacker.crit ?? 5;
+			let damage = Math.floor(baseAttack * (0.5 + Math.random() * 0.5));
+			const isCrit = Math.random() * 100 < critChance;
+
+			if (isCrit) damage *= 2;
+
+			if (projectile.target_type === 'player') {
 				const player = players[projectile.target_id];
 				player.hp = Math.max(0, player.hp - damage);
-				
+
 				pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [
 					player.hp,
 					player.id
 				]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
-				
+
 				if (player.hp <= 0) {
 					const respawn_position = { x: 0, y: 0.6, z: 0 };
 					player.hp = 100;
 					player.position = { ...respawn_position };
+
 					io.emit('player_respawned', {
 						id: projectile.target_id,
 						projectile_id: projectile.id,
 						position: { ...respawn_position },
 						hp: player.hp
 					});
+
 					pool.query('UPDATE players SET hp = $1, x = $2, y = $3, z = $4 WHERE socket_id = $5', [
 						player.hp,
 						player.position.x,
@@ -372,21 +369,18 @@ setInterval(() => {
 						projectile.target_id
 					]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
 				}
-				
 			}
-			
+
 			io.emit('register_damage', {
 				target_id: projectile.target_id,
 				target_type: projectile.target_type,
-				damage: damage,
+				damage,
 				crit: isCrit
 			});
-			
+
 			delete projectiles[id];
 		}
-		 
 	}
-	
 }, 20);
 
 server.listen(port);
