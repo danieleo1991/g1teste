@@ -447,7 +447,7 @@ setInterval(() => {
 			z: dir.z / length
 		};
 
-		if (checkProjectileCollision(current_position)) {
+		if (checkProjectileCollision(projectile.current_position)) {
 			io.emit('projectileHit', { projectileId: projectile.id });
 			delete projectiles[id];
 			continue;
@@ -456,9 +456,9 @@ setInterval(() => {
 		if (!projectiles[id]) continue;
 
 		const distance = Math.sqrt(
-			(targetCenter.x - next_position.x) ** 2 +
-			(targetCenter.y - next_position.y) ** 2 +
-			(targetCenter.z - next_position.z) ** 2
+			(target.position.x - projectile.current_position.x) ** 2 +
+			(target.position.y - projectile.current_position.y) ** 2 +
+			(target.position.z - projectile.current_position.z) ** 2
 		);
 
 		if (distance < 0.6) {
