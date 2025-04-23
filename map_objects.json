@@ -1,0 +1,847 @@
+[
+  {
+    "type": "wall",
+    "position": {
+      "x": -35,
+      "y": 2,
+      "z": 20
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -28,
+      "y": 2,
+      "z": 15
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -2,
+      "y": 2,
+      "z": 15
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -45,
+      "y": 2,
+      "z": 32
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -17,
+      "y": 2,
+      "z": -46
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": 22,
+      "y": 2,
+      "z": -49
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -37,
+      "y": 2,
+      "z": -11
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": 25,
+      "y": 2,
+      "z": -12
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": 50,
+      "y": 2,
+      "z": -47
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -50,
+      "y": 2,
+      "z": -32
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -7,
+      "y": 2,
+      "z": 1
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": 42,
+      "y": 2,
+      "z": -33
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -4,
+      "y": 2,
+      "z": 22
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": 48,
+      "y": 2,
+      "z": 35
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -42,
+      "y": 2,
+      "z": -3
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -33,
+      "y": 2,
+      "z": -27
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -49,
+      "y": 2,
+      "z": -29
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": 4,
+      "y": 2,
+      "z": 47
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -49,
+      "y": 2,
+      "z": 22
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "wall",
+    "position": {
+      "x": -30,
+      "y": 2,
+      "z": 21
+    },
+    "size": {
+      "x": 4,
+      "y": 4,
+      "z": 0.5
+    },
+    "color": 8947848
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": -49,
+      "y": 1,
+      "z": 41
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": -49,
+      "y": 3.5,
+      "z": 41
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": 28,
+      "y": 1,
+      "z": -27
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": 28,
+      "y": 3.5,
+      "z": -27
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": -44,
+      "y": 1,
+      "z": -38
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": -44,
+      "y": 3.5,
+      "z": -38
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": -18,
+      "y": 1,
+      "z": -48
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": -18,
+      "y": 3.5,
+      "z": -48
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": -30,
+      "y": 1,
+      "z": -24
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": -30,
+      "y": 3.5,
+      "z": -24
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": -36,
+      "y": 1,
+      "z": -15
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": -36,
+      "y": 3.5,
+      "z": -15
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": 35,
+      "y": 1,
+      "z": -10
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": 35,
+      "y": 3.5,
+      "z": -10
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": 42,
+      "y": 1,
+      "z": 8
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": 42,
+      "y": 3.5,
+      "z": 8
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": 16,
+      "y": 1,
+      "z": -20
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": 16,
+      "y": 3.5,
+      "z": -20
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": -39,
+      "y": 1,
+      "z": -50
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": -39,
+      "y": 3.5,
+      "z": -50
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": 30,
+      "y": 1,
+      "z": -3
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": 30,
+      "y": 3.5,
+      "z": -3
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": 40,
+      "y": 1,
+      "z": 27
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": 40,
+      "y": 3.5,
+      "z": 27
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": 9,
+      "y": 1,
+      "z": 37
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": 9,
+      "y": 3.5,
+      "z": 37
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": -9,
+      "y": 1,
+      "z": -37
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": -9,
+      "y": 3.5,
+      "z": -37
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "tree_trunk",
+    "position": {
+      "x": 28,
+      "y": 1,
+      "z": -30
+    },
+    "size": {
+      "x": 0.6,
+      "y": 2,
+      "z": 0.6
+    },
+    "color": 9127187
+  },
+  {
+    "type": "tree_foliage",
+    "position": {
+      "x": 28,
+      "y": 3.5,
+      "z": -30
+    },
+    "radius": 1.5,
+    "height": 3,
+    "color": 2263842
+  },
+  {
+    "type": "building_body",
+    "position": {
+      "x": -38,
+      "y": 3,
+      "z": 44
+    },
+    "size": {
+      "x": 8,
+      "y": 6,
+      "z": 8
+    },
+    "color": 11184810
+  },
+  {
+    "type": "building_roof",
+    "position": {
+      "x": -38,
+      "y": 7.5,
+      "z": 44
+    },
+    "radius": 6,
+    "height": 3,
+    "color": 8930304
+  },
+  {
+    "type": "building_body",
+    "position": {
+      "x": 12,
+      "y": 3,
+      "z": -9
+    },
+    "size": {
+      "x": 8,
+      "y": 6,
+      "z": 8
+    },
+    "color": 11184810
+  },
+  {
+    "type": "building_roof",
+    "position": {
+      "x": 12,
+      "y": 7.5,
+      "z": -9
+    },
+    "radius": 6,
+    "height": 3,
+    "color": 8930304
+  },
+  {
+    "type": "building_body",
+    "position": {
+      "x": 13,
+      "y": 3,
+      "z": -26
+    },
+    "size": {
+      "x": 8,
+      "y": 6,
+      "z": 8
+    },
+    "color": 11184810
+  },
+  {
+    "type": "building_roof",
+    "position": {
+      "x": 13,
+      "y": 7.5,
+      "z": -26
+    },
+    "radius": 6,
+    "height": 3,
+    "color": 8930304
+  },
+  {
+    "type": "building_body",
+    "position": {
+      "x": -32,
+      "y": 3,
+      "z": -4
+    },
+    "size": {
+      "x": 8,
+      "y": 6,
+      "z": 8
+    },
+    "color": 11184810
+  },
+  {
+    "type": "building_roof",
+    "position": {
+      "x": -32,
+      "y": 7.5,
+      "z": -4
+    },
+    "radius": 6,
+    "height": 3,
+    "color": 8930304
+  },
+  {
+    "type": "monster_spawn",
+    "position": {
+      "x": -44,
+      "y": 0.6,
+      "z": 33
+    },
+    "monster_id": 0
+  },
+  {
+    "type": "monster_spawn",
+    "position": {
+      "x": 38,
+      "y": 0.6,
+      "z": -40
+    },
+    "monster_id": 1
+  },
+  {
+    "type": "monster_spawn",
+    "position": {
+      "x": 11,
+      "y": 0.6,
+      "z": 23
+    },
+    "monster_id": 1
+  },
+  {
+    "type": "monster_spawn",
+    "position": {
+      "x": -28,
+      "y": 0.6,
+      "z": 48
+    },
+    "monster_id": 1
+  },
+  {
+    "type": "monster_spawn",
+    "position": {
+      "x": -42,
+      "y": 0.6,
+      "z": 21
+    },
+    "monster_id": 1
+  },
+  {
+    "type": "monster_spawn",
+    "position": {
+      "x": 50,
+      "y": 0.6,
+      "z": 32
+    },
+    "monster_id": 0
+  },
+  {
+    "type": "monster_spawn",
+    "position": {
+      "x": 1,
+      "y": 0.6,
+      "z": 15
+    },
+    "monster_id": 1
+  },
+  {
+    "type": "monster_spawn",
+    "position": {
+      "x": 41,
+      "y": 0.6,
+      "z": 40
+    },
+    "monster_id": 1
+  },
+  {
+    "type": "monster_spawn",
+    "position": {
+      "x": 3,
+      "y": 0.6,
+      "z": 12
+    },
+    "monster_id": 1
+  },
+  {
+    "type": "monster_spawn",
+    "position": {
+      "x": 39,
+      "y": 0.6,
+      "z": -4
+    },
+    "monster_id": 0
+  }
+]
