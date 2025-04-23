@@ -274,7 +274,7 @@ setInterval(() => {
 setInterval(() => {
 	for (const id in projectiles) {
 		const projectile = projectiles[id];
-		const current_position = projectile.position;
+		const current_position = projectile.current_position;
 
 		let target;
 
