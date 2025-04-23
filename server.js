@@ -339,8 +339,8 @@ io.on('connection', (socket) => {
 		
 		console.log("ODPALAM");
 		
-		let FROMPLAYERPOS = target = players[data.socket.id].position.y];
-		let TOPLAYERPOS = target = players[data.target_id].position.y];
+		let FROMPLAYERPOS = target = players[data.socket.id].position.y;
+		let TOPLAYERPOS = target = players[data.target_id].position.y;
 		console.log("OD POZYCJI GRACZA:", FROMPLAYERPOS);
 		console.log("DO POZYCJI GRACZA:", TOPLAYERPOS);
 		
