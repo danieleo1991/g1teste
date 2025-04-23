@@ -250,6 +250,7 @@ io.on('connection', (socket) => {
 	socket.on('use_skill', (data) => {
 		if (!skills[data.skill_name]) return;
 		if (!skill_last_use[socket.id]) skill_last_use[socket.id] = {};
+
 		const now = Date.now();
 		const last_use = skill_last_use[socket.id][data.skill_name] || 0;
 		const cooldown = skills[data.skill_name].cooldown;
@@ -259,10 +260,31 @@ io.on('connection', (socket) => {
 		const attacker = players[socket.id];
 		if (!attacker) return;
 
+		const target = (data.target_type === 'player')
+			? players[data.target_id]
+			: monsters_spawns.find(m => m.id === data.target_id);
+
+		if (!target) return;
+
+		// Obliczamy wektor od atakującego do celu
+		const dir = {
+			x: target.position.x - attacker.position.x,
+			y: (target.position.y + 2.2) - attacker.position.y, // celujemy w "głowę"
+			z: target.position.z - attacker.position.z
+		};
+
+		const length = Math.sqrt(dir.x ** 2 + dir.y ** 2 + dir.z ** 2);
+		const normalized = {
+			x: dir.x / length,
+			y: dir.y / length,
+			z: dir.z / length
+		};
+
+		// Początkowa pozycja pocisku: trochę przed graczem, na wysokości oczu
 		const start_position = {
-			x: attacker.position.x,
-			y: attacker.position.y + 2.2,
-			z: attacker.position.z
+			x: attacker.position.x + normalized.x * 0.5,
+			y: attacker.position.y + 1.8 + 0.4,
+			z: attacker.position.z + normalized.z * 0.5
 		};
 
 		const projectile = {
