@@ -321,9 +321,9 @@ setInterval(() => {
 		projectile.current_position = next_position;
 
 		const distance = Math.sqrt(
-			(target.position.x - projectile.position.x) ** 2 +
-			(target.position.y - projectile.position.y) ** 2 +
-			(target.position.z - projectile.position.z) ** 2
+			(target.position.x - projectile.current_position.x) ** 2 +
+			(target.position.y - projectile.current_position.y) ** 2 +
+			(target.position.z - projectile.current_position.z) ** 2
 		);
 
 		if (distance < 0.6) {
