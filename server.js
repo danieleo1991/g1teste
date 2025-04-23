@@ -437,14 +437,12 @@ setInterval(() => {
 			z: projectile.current_position.z + normalized.z * 0.3
 		};
 
-		// ✅ Sprawdzenie kolizji PRZED przesunięciem
 		if (checkProjectileCollision(next_position)) {
 			io.emit('projectileHit', { projectileId: projectile.id });
 			delete projectiles[id];
 			continue;
 		}
 
-		// ✅ Dopiero teraz przesuwamy
 		projectile.current_position = next_position;
 		
 		if (!projectiles[id]) continue;
@@ -455,11 +453,9 @@ setInterval(() => {
 			(targetCenter.z - next_position.z) ** 2
 		);
 
-		console.log("C -------- ", targetCenter.y);
-		console.log("NX -------- ", next_position.y);
 		if (distance < 0.6) {
 			
-			const obstructed = isLineObstructed(projectile.current_position, target.position);
+			const obstructed = isLineObstructed(projectile.current_position, targetCenter);
 			if (obstructed) {
 				io.emit('projectileHit', { projectileId: projectile.id });
 				delete projectiles[id];
