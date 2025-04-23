@@ -273,96 +273,83 @@ setInterval(() => {
 }, 100);
 
 setInterval(() => {
-	
 	for (const id in projectiles) {
-		
-		let target;
-		let current_position;
 		const projectile = projectiles[id];
 		
-		if (projectile.target_type == 'player') {
+		let target;
+		if (projectile.target_type === 'player') {
 			target = players[projectile.target_id];
-			current_position = projectile.current_position;
-		}
-		else if (projectile.target_type === 'monster') {
+		} else if (projectile.target_type === 'monster') {
 			target = monsters_spawns.find(m => m.id === projectile.target_id);
-			current_position = target.position;
 		}
-		
-		if (!target || !current_position) {
+
+		if (!target || !projectile.current_position) {
 			console.warn(`❌ Nie znaleziono celu dla pocisku ${id}`, projectile);
 			delete projectiles[id];
 			continue;
 		}
-		
+
 		const dir = {
-			x: target.position.x - current_position.x,
-			y: target.position.y - current_position.y,
-			z: target.position.z - current_position.z
+			x: target.position.x - projectile.current_position.x,
+			y: target.position.y - projectile.current_position.y,
+			z: target.position.z - projectile.current_position.z
 		};
-		
+
 		const length = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2);
-		
 		const normalized = {
 			x: dir.x / length,
 			y: dir.y / length,
 			z: dir.z / length
 		};
-		
+
 		const next_position = {
-			x: current_position.x + normalized.x * 0.3,
-			y: current_position.y + normalized.y * 0.3,
-			z: current_position.z + normalized.z * 0.3
+			x: projectile.current_position.x + normalized.x * 0.3,
+			y: projectile.current_position.y + normalized.y * 0.3,
+			z: projectile.current_position.z + normalized.z * 0.3
 		};
-		
-		// ❌ Zatrzymaj, jeśli trafia w ścianę
+
+		// ✅ Sprawdzenie kolizji PRZED przesunięciem
 		if (checkProjectileCollision(next_position)) {
 			io.emit('projectileHit', { projectileId: projectile.id });
 			delete projectiles[id];
 			continue;
 		}
-		
+
+		// ✅ Dopiero teraz przesuwamy
 		projectile.current_position = next_position;
-		
-		current_position.x += normalized.x * 0.3;
-		current_position.y += normalized.y * 0.3;
-		current_position.z += normalized.z * 0.3;
-		
+
 		const distance = Math.sqrt(
-			(target.position.x - current_position.x) ** 2 +
-			(target.position.y - current_position.y) ** 2 +
-			(target.position.z - current_position.z) ** 2
+			(target.position.x - next_position.x) ** 2 +
+			(target.position.y - next_position.y) ** 2 +
+			(target.position.z - next_position.z) ** 2
 		);
-		
+
 		if (distance < 0.6) {
-			
-			let isCrit = false;
 			const attacker = players[projectile.from];
-			
 			if (!attacker) {
 				delete projectiles[id];
-				return;
+				continue;
 			}
-			
+
 			const baseAttack = attacker?.attack ?? 10;
 			const critChance = attacker?.crit ?? 5;
 			let damage = Math.floor(baseAttack * (0.5 + Math.random() * 0.5));
+			let isCrit = false;
 
 			if (Math.random() * 100 < critChance) {
 				damage *= 2;
 				isCrit = true;
 			}
-			
-			if (projectile.target_type == 'player') {
-				
+
+			if (projectile.target_type === 'player') {
 				const player = players[projectile.target_id];
 				player.hp = Math.max(0, player.hp - damage);
-				
+
 				pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [
 					player.hp,
 					player.id
 				]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
-				
+
 				if (player.hp <= 0) {
 					const respawn_position = { x: 0, y: 0.6, z: 0 };
 					player.hp = 100;
@@ -381,21 +368,18 @@ setInterval(() => {
 						projectile.target_id
 					]).catch(err => console.error("❌ Błąd przy zapisie do bazy:", err));
 				}
-				
 			}
-			
+
 			io.emit('register_damage', {
 				target_id: projectile.target_id,
 				target_type: projectile.target_type,
 				damage: damage,
 				crit: isCrit
 			});
-			
+
 			delete projectiles[id];
 		}
-		 
 	}
-	
 }, 20);
 
 server.listen(port);
