@@ -77,8 +77,18 @@ const skills = {
 };
 
 const monsters = [
-	{ id: 0, hp: 100, speed: 0.15 },
-	{ id: 1, hp: 200, speed: 0.3 }
+	{
+		id: 0,
+		name: 'Dragon',
+		hp: 100,
+		speed: 0.15
+	},
+	{
+		id: 1,
+		name: 'Rat',
+		hp: 200,
+		speed: 0.3
+	}
 ];
 
 const mapObjects = require('./map_objects.json');
@@ -357,7 +367,7 @@ setInterval(() => {
 
 		const next_position = {
 			x: projectile.current_position.x + normalized.x * 0.3,
-			y: projectile.current_position.y + normalized.y * 0.3,
+			y: projectile.current_position.y + 2 + normalized.y * 0.3,
 			z: projectile.current_position.z + normalized.z * 0.3
 		};
 
@@ -375,7 +385,7 @@ setInterval(() => {
 
 		const distance = Math.sqrt(
 			(target.position.x - next_position.x) ** 2 +
-			(target.position.y - next_position.y) ** 2 +
+			(target.position.y + 2 - next_position.y) ** 2 +
 			(target.position.z - next_position.z) ** 2
 		);
 
