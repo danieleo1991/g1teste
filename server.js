@@ -210,7 +210,7 @@ io.on('connection', (socket) => {
 		const projectile = {
 			id: projectile_id,
 			from: data.from,
-			position: { ...data.start_position },
+			current_position: { ...data.start_position },
 			target_id: data.target_id,
 			target_type: data.target_type,
 			skill_name: skill_name
@@ -318,7 +318,7 @@ setInterval(() => {
 		}
 
 		// 🟢 Aktualizuj pozycję dopiero po sprawdzeniu kolizji
-		projectile.position = next_position;
+		projectile.current_position = next_position;
 
 		const distance = Math.sqrt(
 			(target.position.x - projectile.position.x) ** 2 +
