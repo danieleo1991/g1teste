@@ -202,24 +202,20 @@ io.on('connection', (socket) => {
 		const attacker = players[socket.id];
 		if (!attacker) return;
 
-		const PROJECTILE_HEIGHT = 2; // np. 2 metry nad ziemią (możesz ustawić 6 jak wcześniej)
+		const start_position = {
+			x: attacker.position.x,
+			y: attacker.position.y + 2,
+			z: attacker.position.z
+		};
 
 		const projectile = {
-			id: crypto.randomUUID(),
+			id: projectile_id,
 			from: socket.id,
-			skill_name: data.skill_name,
+			start_position,
+			current_position: { ...start_position },
 			target_id: data.target_id,
 			target_type: data.target_type,
-			start_position: {
-				x: attacker.position.x,
-				y: attacker.position.y + PROJECTILE_HEIGHT,
-				z: attacker.position.z
-			},
-			current_position: {
-				x: attacker.position.x,
-				y: attacker.position.y + PROJECTILE_HEIGHT,
-				z: attacker.position.z
-			}
+			skill_name: skill_name
 		};
 
 		projectiles[projectile.id] = projectile;
