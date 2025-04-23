@@ -459,7 +459,11 @@ setInterval(() => {
 			
 			console.log("🔫 Pocisk z:", projectile.current_position, "🎯 do:", targetCenter);
 			
-			const obstructed = isLineObstructed(projectile.current_position, targetCenter);
+			const from = { ...projectile.current_position };
+			from.y += 1.2;
+			const to = { ...targetCenter };
+			const obstructed = isLineObstructed(from, to);
+			
 			if (obstructed) {
 				console.log("❌ Zablokowany przez przeszkodę!");
 				io.emit('projectileHit', { projectileId: projectile.id });
