@@ -94,6 +94,63 @@ const monsters_spawns = [
 */
 const monsters_spawns = [];
 
+function isLineObstructed(start, end) {
+	for (const obj of mapObjects) {
+		if (!obj.size || !obj.position) continue;
+
+		const halfSize = {
+			x: obj.size.x / 2,
+			y: obj.size.y / 2,
+			z: obj.size.z / 2
+		};
+
+		const min = {
+			x: obj.position.x - halfSize.x,
+			y: obj.position.y,
+			z: obj.position.z - halfSize.z
+		};
+
+		const max = {
+			x: obj.position.x + halfSize.x,
+			y: obj.position.y + obj.size.y,
+			z: obj.position.z + halfSize.z
+		};
+
+		// Sprawdź czy linia przecina AABB obiektu (Axis-Aligned Bounding Box)
+		if (lineIntersectsBox(start, end, min, max)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function lineIntersectsBox(start, end, min, max) {
+	// Algorytm Liang-Barsky / slab method
+	let tmin = 0.0;
+	let tmax = 1.0;
+
+	const delta = {
+		x: end.x - start.x,
+		y: end.y - start.y,
+		z: end.z - start.z
+	};
+
+	const check = (axis) => {
+		if (Math.abs(delta[axis]) < 1e-6) {
+			return start[axis] >= min[axis] && start[axis] <= max[axis];
+		}
+		const ood = 1.0 / delta[axis];
+		let t1 = (min[axis] - start[axis]) * ood;
+		let t2 = (max[axis] - start[axis]) * ood;
+		if (t1 > t2) [t1, t2] = [t2, t1];
+		tmin = Math.max(tmin, t1);
+		tmax = Math.min(tmax, t2);
+		return tmax >= tmin;
+	};
+
+	return check('x') && check('y') && check('z');
+}
+
 function checkProjectileCollision(position) {
 	for (const obj of mapObjects) {
 		if (!obj.size || !obj.position) continue;
@@ -204,7 +261,7 @@ io.on('connection', (socket) => {
 
 		const start_position = {
 			x: attacker.position.x,
-			y: attacker.position.y + 6,
+			y: attacker.position.y + 1.2,
 			z: attacker.position.z
 		};
 
@@ -323,6 +380,14 @@ setInterval(() => {
 		);
 
 		if (distance < 0.6) {
+			
+			const obstructed = isLineObstructed(projectile.current_position, target.position);
+			if (obstructed) {
+				io.emit('projectileHit', { projectileId: projectile.id });
+				delete projectiles[id];
+				continue;
+			}
+			
 			const attacker = players[projectile.from];
 			if (!attacker) {
 				delete projectiles[id];
