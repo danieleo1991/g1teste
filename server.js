@@ -146,8 +146,8 @@ io.on('connection', (socket) => {
 			position: data.position,
 			hp: result.rows[0]?.hp,
 			player_name: player_name,
-			attack: playerData?.attack ?? 10,
-			crit: playerData?.crit ?? 5
+			attack: result.rows[0]?.attack ?? 10,
+			crit: result.rows[0]?.crit ?? 5
 		};
 		
 		socket.emit('currentPlayers', players);
