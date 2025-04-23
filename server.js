@@ -460,4 +460,15 @@ setInterval(() => {
 	}
 }, 20);
 
+setInterval(() => {
+	for (const socketId in players) {
+		const player = players[socketId];
+		io.to(socketId).emit('positionCorrection', {
+			x: player.position.x,
+			y: player.position.y,
+			z: player.position.z
+		});
+	}
+}, 5000); // co 5 sekund
+
 server.listen(port);
