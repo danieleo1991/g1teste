@@ -414,7 +414,7 @@ setInterval(() => {
 
 		const dir = {
 			x: target.position.x - projectile.current_position.x,
-			y: (target.position.y + 1.5) - projectile.current_position.y, // 👈 celuj wyżej
+			y: target.position.y - projectile.current_position.y,
 			z: target.position.z - projectile.current_position.z
 		};
 
