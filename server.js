@@ -462,29 +462,14 @@ setInterval(() => {
 		if (distance < 0.6) {
 			
 			console.log("DYSTANS WYKRYTY");
-			
-			const from = {
-				x: projectile.current_position.x,
-				y: projectile.current_position.y + 0.5, // 👈 było +1.2 – spróbuj mniej
-				z: projectile.current_position.z
-			};
 
-			const to = {
-				x: target.position.x,
-				y: target.position.y + 1.2, // celuj w środek ciała
-				z: target.position.z
-			};
-
-			const obstructed = isLineObstructed(from, to);
+			const obstructed = isLineObstructed(projectile.current_position, target.position);
 			
 			if (obstructed) {
 				console.log("❌ Zablokowany przez przeszkodę!");
 				io.emit('projectileHit', { projectileId: projectile.id });
 				delete projectiles[id];
 				continue;
-			}
-			else {
-				console.log("brak...");
 			}
 
 			const baseAttack = attacker?.attack ?? 10;
