@@ -93,6 +93,7 @@ const monsters_spawns = [
 
 function checkProjectileCollision(position) {
 	for (const obj of mapObjects) {
+		if (!obj.size || !obj.position) continue;
 		const halfSize = {
 			x: obj.size.x / 2,
 			y: obj.size.y / 2,
