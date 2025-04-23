@@ -209,7 +209,7 @@ io.on('connection', (socket) => {
 		};
 
 		const projectile = {
-			id: projectile_id,
+			id: crypto.randomUUID(),
 			from: socket.id,
 			start_position,
 			current_position: { ...start_position },
