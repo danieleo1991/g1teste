@@ -325,20 +325,19 @@ setInterval(() => {
 		if (distance < 0.6) {
 			
 			let isCrit = false;
+			const attacker = players[projectile.from];
+			const baseAttack = attacker?.attack ?? 10;
+			const critChance = attacker?.crit ?? 5;
+			let damage = Math.floor(baseAttack * (0.5 + Math.random() * 0.5));
+
+			if (Math.random() * 100 < critChance) {
+				damage *= 2;
+				isCrit = true;
+			}
 			
 			if (projectile.target_type == 'player') {
 				
 				const player = players[projectile.target_id];
-				const attacker = players[projectile.from];
-				const baseAttack = attacker?.attack ?? 10;
-				const critChance = attacker?.crit ?? 5;
-				let damage = Math.floor(baseAttack * (0.5 + Math.random() * 0.5));
-
-				if (Math.random() * 100 < critChance) {
-					damage *= 2;
-					isCrit = true;
-				}
-
 				player.hp = Math.max(0, player.hp - damage);
 				
 				pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [
