@@ -356,7 +356,7 @@ io.on('connection', (socket) => {
 		
 		const start_position = {
 			x: players[socket.id].position.x,
-			y: players[socket.id].position.y,
+			y: players[socket.id].position.y + 1.2,
 			z: players[socket.id].position.z
 		};
 
@@ -479,6 +479,8 @@ setInterval(() => {
 			delete projectiles[id];
 			continue;
 		}
+		
+		target.position.y += 1.2;
 		
 		const dx = target.position.x - projectile.current_position.x;
 		const dy = target.position.y - projectile.current_position.y;
