@@ -81,21 +81,7 @@ const monsters = [
 	{ id: 1, hp: 200, speed: 0.3 }
 ];
 
-const mapObjects = [
-	{
-		id: 'wall1',
-		type: 'box',
-		position: { x: 35, y: 0, z: 5 },
-		size: { x: 4, y: 4, z: 0.5 } // szerokość, wysokość, głębokość
-	},
-	{
-		id: 'building1',
-		type: 'box',
-		position: { x: -10, y: 0, z: 10 },
-		size: { x: 8, y: 6, z: 8 }
-	}
-	// możesz dodać więcej przeszkód
-];
+const mapObjects = require('./map.json');
 
 const monsters_spawns = [
 	{ id: crypto.randomUUID(), monster_id: 0, position: { x: 0, y: 0.6, z: 20 }, direction: { x: 1, z: 0 }, timer: 0 },
