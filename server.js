@@ -412,10 +412,16 @@ setInterval(() => {
 			continue;
 		}
 
+		const targetCenter = {
+			x: target.position.x,
+			y: target.position.y + 1.2,
+			z: target.position.z
+		};
+
 		const dir = {
-			x: target.position.x - projectile.current_position.x,
-			y: (target.position.y + 1.2) - projectile.current_position.y + 1.2,
-			z: target.position.z - projectile.current_position.z
+			x: targetCenter.x - projectile.current_position.x,
+			y: targetCenter.y - projectile.current_position.y,
+			z: targetCenter.z - projectile.current_position.z
 		};
 
 		const length = Math.sqrt(dir.x**2 + dir.y**2 + dir.z**2);
@@ -444,9 +450,9 @@ setInterval(() => {
 		if (!projectiles[id]) continue;
 
 		const distance = Math.sqrt(
-			(target.position.x - next_position.x) ** 2 +
-			(target.position.y - next_position.y) ** 2 +
-			(target.position.z - next_position.z) ** 2
+			(targetCenter.x - next_position.x) ** 2 +
+			(targetCenter.y - next_position.y) ** 2 +
+			(targetCenter.z - next_position.z) ** 2
 		);
 
 		if (distance < 0.6) {
