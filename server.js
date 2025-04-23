@@ -116,13 +116,13 @@ function isLineObstructed(start, end) {
 
 		const min = {
 			x: obj.position.x - halfSize.x,
-			y: obj.position.y,
+			y: obj.position.y - halfSize.y, // 👈 poprawione!
 			z: obj.position.z - halfSize.z
 		};
 
 		const max = {
 			x: obj.position.x + halfSize.x,
-			y: obj.position.y + obj.size.y,
+			y: obj.position.y + halfSize.y, // 👈 poprawione!
 			z: obj.position.z + halfSize.z
 		};
 
