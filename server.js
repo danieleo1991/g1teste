@@ -228,7 +228,11 @@ io.on('connection', (socket) => {
 		
 		socket.broadcast.emit('newPlayerJoined', {
 			id: socket.id,
-			position: data.position,
+			position: {
+				x: result.rows[0].x ?? 0,
+				y: result.rows[0].y ?? 0.6,
+				z: result.rows[0].z ?? 0
+			},
 			hp: result.rows[0]?.hp,
 			player_name: player_name
 		});
