@@ -11,7 +11,7 @@ app.use(express.json());
 
 const http = require('http');
 const crypto = require('crypto');
-const { Vector3, Raycaster } = require('three');
+const { Vector3, Raycaster, Box3 } = require('three');
 const server = http.createServer(app);
 const port = process.env.PORT || 3000;
 
@@ -105,33 +105,22 @@ const monsters_spawns = [
 const monsters_spawns = [];
 
 function isLineObstructed(start, end) {
-	for (const obj of mapObjects) {
-		if (!obj.size || !obj.position) continue;
+  const ray = new Raycaster();
+  const direction = new Vector3(end.x - start.x, end.y - start.y, end.z - start.z).normalize();
+  ray.set(new Vector3(start.x, start.y, start.z), direction);
+  const distance = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2 + (end.z - start.z) ** 2);
 
-		const halfSize = {
-			x: obj.size.x / 2,
-			y: obj.size.y / 2,
-			z: obj.size.z / 2
-		};
-
-		const min = {
-			x: obj.position.x - halfSize.x,
-			y: obj.position.y,
-			z: obj.position.z - halfSize.z
-		};
-
-		const max = {
-			x: obj.position.x + halfSize.x,
-			y: obj.position.y + obj.size.y,
-			z: obj.position.z + halfSize.z
-		};
-
-		// Sprawdź czy linia przecina AABB obiektu (Axis-Aligned Bounding Box)
-		if (lineIntersectsBox(start, end, min, max)) {
-			return true;
-		}
-	}
-	return false;
+  for (const obj of mapObjects) {
+    if (!obj.position || !obj.size) continue;
+    const box = new Box3().setFromCenterAndSize(
+      new Vector3(obj.position.x, obj.position.y + obj.size.y / 2, obj.position.z),
+      new Vector3(obj.size.x, obj.size.y, obj.size.z)
+    );
+    if (ray.ray.intersectBox(box, new Vector3()) !== null && ray.ray.distanceSqToPoint(box.getCenter(new Vector3())) <= distance ** 2) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function lineIntersectsBox(start, end, min, max) {
