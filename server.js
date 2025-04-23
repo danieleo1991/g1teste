@@ -455,6 +455,8 @@ setInterval(() => {
 			(targetCenter.z - next_position.z) ** 2
 		);
 
+		console.log("C -------- ", targetCenter.y);
+		console.log("NX -------- ", next_position.y);
 		if (distance < 0.6) {
 			
 			const obstructed = isLineObstructed(projectile.current_position, target.position);
