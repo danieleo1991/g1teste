@@ -324,10 +324,11 @@ setInterval(() => {
 		
 		if (distance < 0.6) {
 			
+			let isCrit = false;
+			
 			if (projectile.target_type == 'player') {
 				
 				const player = players[projectile.target_id];
-				
 				const attacker = players[projectile.from];
 				const baseAttack = attacker?.attack ?? 10;
 				const critChance = attacker?.crit ?? 5;
@@ -335,7 +336,7 @@ setInterval(() => {
 
 				if (Math.random() * 100 < critChance) {
 					damage *= 2;
-					console.log(`💥 CRIT! Obrażenia: ${damage}`);
+					isCrit = true;
 				}
 
 				player.hp = Math.max(0, player.hp - damage);
@@ -369,7 +370,8 @@ setInterval(() => {
 			io.emit('register_damage', {
 				target_id: projectile.target_id,
 				target_type: projectile.target_type,
-				damage: damage
+				damage: damage,
+				isCrit: isCrit
 			});
 			
 			delete projectiles[id];
