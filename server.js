@@ -336,6 +336,14 @@ io.on('connection', (socket) => {
 			target_type: data.target_type,
 			skill_name: data.skill_name
 		};
+		
+		console.log("ODPALAM");
+		
+		let FROMPLAYERPOS = target = players[data.socket.id.position.y];
+		let TOPLAYERPOS = target = players[data.target_id.position.y];
+		console.log("OD POZYCJI GRACZA:", FROMPLAYERPOS);
+		console.log("DO POZYCJI GRACZA:", TOPLAYERPOS);
+		
 
 		projectiles[projectile.id] = projectile;
 		io.emit('use_skill', projectile);
@@ -461,13 +469,18 @@ setInterval(() => {
 
 		if (distance < 0.6) {
 			
-			console.log("Leci...");
-			
-			console.log("🔫 Pocisk z:", projectile.current_position, "🎯 do:", targetCenter);
-			
-			const from = { ...projectile.current_position };
-			from.y += 1.2;
-			const to = { ...targetCenter };
+			const from = {
+				x: projectile.current_position.x,
+				y: projectile.current_position.y + 0.5, // 👈 było +1.2 – spróbuj mniej
+				z: projectile.current_position.z
+			};
+
+			const to = {
+				x: target.position.x,
+				y: target.position.y + 1.2, // celuj w środek ciała
+				z: target.position.z
+			};
+
 			const obstructed = isLineObstructed(from, to);
 			
 			if (obstructed) {
