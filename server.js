@@ -193,6 +193,39 @@ function checkProjectileCollision(position) {
 	return false;
 }
 
+function isPositionBlocked(x, z) {
+	const playerRadius = 0.5;
+	const playerHeight = 1.8;
+	const y = 0.6; // przyjmujemy stałą wysokość nóg gracza
+
+	for (const obj of mapObjects) {
+		if (!obj.size || !obj.position) continue;
+
+		const min = {
+			x: obj.position.x - obj.size.x / 2,
+			y: obj.position.y,
+			z: obj.position.z - obj.size.z / 2
+		};
+
+		const max = {
+			x: obj.position.x + obj.size.x / 2,
+			y: obj.position.y + obj.size.y,
+			z: obj.position.z + obj.size.z / 2
+		};
+
+		const intersectsXZ =
+			x + playerRadius > min.x &&
+			x - playerRadius < max.x &&
+			z + playerRadius > min.z &&
+			z - playerRadius < max.z;
+
+		const intersectsY = y < max.y && (y + playerHeight) > min.y;
+
+		if (intersectsXZ && intersectsY) return true;
+	}
+	return false;
+}
+
 io.on('connection', (socket) => {
 	
 	socket.on('player_ready_to_play', async () => {
@@ -221,7 +254,12 @@ io.on('connection', (socket) => {
 			hp: result.rows[0]?.hp,
 			player_name: player_name,
 			attack: result.rows[0]?.attack ?? 10,
-			crit: result.rows[0]?.crit ?? 5
+			crit: result.rows[0]?.crit ?? 5,
+			last_position: {
+				x: result.rows[0].x ?? 0,
+				y: result.rows[0].y ?? 0.6,
+				z: result.rows[0].z ?? 0
+			},
 		};
 		
 		socket.emit('currentPlayers', players);
@@ -298,14 +336,31 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('updatePosition', async (data) => {
-		if (players[socket.id]) {
-			players[socket.id].position = { x: data.x, y: data.y, z: data.z };
-			socket.broadcast.emit('playerMoved', { id: socket.id, position: data });
-			try {
-				await pool.query("UPDATE players SET x = $1, y = $2, z = $3 WHERE id = $4", [data.x, data.y, data.z, data.id]);
-			} catch (err) {
-				console.error("❌ Błąd przy zapisie pozycji do bazy:", err);
-			}
+		const player = players[socket.id];
+		if (!player) return;
+
+		const dx = data.x - player.last_position.x;
+		const dz = data.z - player.last_position.z;
+		const distance = Math.sqrt(dx * dx + dz * dz);
+
+		const maxDistance = 0.3; // 🧱 max 0.3 jednostki na tick
+
+		const blocked = isPositionBlocked(data.x, data.z);
+
+		if (distance > maxDistance || blocked) {
+			console.warn(`❌ Podejrzany ruch od gracza ${socket.id} – odległość ${distance.toFixed(2)}, kolizja: ${blocked}`);
+			return; // ❌ zignoruj ruch
+		}
+
+		player.position = { x: data.x, y: data.y, z: data.z };
+		player.last_position = { x: data.x, y: data.y, z: data.z };
+
+		socket.broadcast.emit('playerMoved', { id: socket.id, position: data });
+
+		try {
+			await pool.query("UPDATE players SET x = $1, y = $2, z = $3 WHERE id = $4", [data.x, data.y, data.z, data.id]);
+		} catch (err) {
+			console.error("❌ Błąd przy zapisie pozycji do bazy:", err);
 		}
 	});
 
@@ -469,6 +524,6 @@ setInterval(() => {
 			z: player.position.z
 		});
 	}
-}, 5000); // co 5 sekund
+}, 5000);
 
 server.listen(port);
