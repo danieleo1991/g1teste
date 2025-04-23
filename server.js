@@ -261,7 +261,7 @@ io.on('connection', (socket) => {
 
 		const start_position = {
 			x: attacker.position.x,
-			y: attacker.position.y ,
+			y: attacker.position.y + 2,
 			z: attacker.position.z
 		};
 
@@ -344,7 +344,7 @@ setInterval(() => {
 
 		const dir = {
 			x: target.position.x - projectile.current_position.x,
-			y: target.position.y - projectile.current_position.y,
+			y: target.position.y + 2 - projectile.current_position.y,
 			z: target.position.z - projectile.current_position.z
 		};
 
