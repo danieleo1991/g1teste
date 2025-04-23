@@ -321,23 +321,19 @@ io.on('connection', (socket) => {
 		const attacker = players[socket.id];
 		if (!attacker) return;
 
-		const start_position = {
-			x: attacker.position.x,
-			y: attacker.position.y + 1.2,
-			z: attacker.position.z
-		};
-
 		const projectile = {
 			id: crypto.randomUUID(),
 			from: socket.id,
-			start_position,
+			position: {
+				x: players[socket.id].position.x,
+				y: players[socket.id].position.y,
+				z: players[socket.id].position.z
+			},
 			current_position: { ...start_position },
 			target_id: data.target_id,
 			target_type: data.target_type,
 			skill_name: data.skill_name
 		};
-		
-		console.log("ODPALAM");
 		
 		let FROMPLAYERPOS = target = players[socket.id].position.y;
 		let TOPLAYERPOS = target = players[data.target_id].position.y;
@@ -411,9 +407,11 @@ setInterval(() => {
 
 setInterval(() => {
 	for (const id in projectiles) {
+			
+		if (!projectiles[id]) continue;
 		
 		const projectile = projectiles[id];
-			
+		
 		const attacker = players[projectile.from];
 		if (!attacker) {
 			delete projectiles[id];
@@ -453,13 +451,10 @@ setInterval(() => {
 			continue;
 		}
 		
-		if (!projectiles[id]) continue;
-
-		const distance = Math.sqrt(
-			(target.position.x - projectile.current_position.x) ** 2 +
-			(target.position.y - projectile.current_position.y) ** 2 +
-			(target.position.z - projectile.current_position.z) ** 2
-		);
+		const dx = target.position.x - projectile.current_position.x;
+		const dy = target.position.y - projectile.current_position.y;
+		const dz = target.position.z - projectile.current_position.z;
+		const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
 		if (distance < 0.6) {
 			
