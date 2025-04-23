@@ -91,7 +91,40 @@ const monsters = [
 	}
 ];
 
-const mapObjects = require('./map_objects.json');
+//const mapObjects = require('./map_objects.json');
+
+const mapObjects = [
+  {
+    type: "wall",
+    position: { x: 0, y: 0, z: 0 },
+    size: { x: 4, y: 4, z: 0.5 },
+    color: 8947848
+  },
+  {
+    type: "wall",
+    position: { x: 5, y: 0, z: 5 },
+    size: { x: 4, y: 4, z: 0.5 },
+    color: 8947848
+  },
+  {
+    type: "wall",
+    position: { x: -5, y: 0, z: -5 },
+    size: { x: 4, y: 4, z: 0.5 },
+    color: 8947848
+  },
+  {
+    type: "wall",
+    position: { x: 10, y: 0, z: 0 },
+    size: { x: 4, y: 4, z: 0.5 },
+    color: 8947848
+  },
+  {
+    type: "wall",
+    position: { x: 0, y: 0, z: 10 },
+    size: { x: 4, y: 4, z: 0.5 },
+    color: 8947848
+  }
+];
 
 /*
 const monsters_spawns = [
@@ -323,7 +356,7 @@ io.on('connection', (socket) => {
 		
 		const start_position = {
 			x: players[socket.id].position.x,
-			y: players[socket.id].position.y + 6,
+			y: players[socket.id].position.y,
 			z: players[socket.id].position.z
 		};
 
