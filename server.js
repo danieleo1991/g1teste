@@ -317,6 +317,8 @@ setInterval(() => {
 
 		// ✅ Dopiero teraz przesuwamy
 		projectile.current_position = next_position;
+		
+		if (!projectiles[id]) continue;
 
 		const distance = Math.sqrt(
 			(target.position.x - next_position.x) ** 2 +
