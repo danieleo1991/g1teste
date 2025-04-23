@@ -457,6 +457,7 @@ setInterval(() => {
 			
 			const obstructed = isLineObstructed(projectile.current_position, targetCenter);
 			if (obstructed) {
+				console.log("❌ Zablokowany przez przeszkodę!");
 				io.emit('projectileHit', { projectileId: projectile.id });
 				delete projectiles[id];
 				continue;
