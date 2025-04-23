@@ -347,7 +347,6 @@ setInterval(() => {
 		if (player.inputs.left) moveX -= speed;
 		if (player.inputs.right) moveX += speed;
 
-		// Zakładamy domyślnie pozycję y=0 jako podłoże
 		if (player.inputs.jump && !player.isJumping) {
 			player.velocityY = jumpPower;
 			player.isJumping = true;
@@ -392,7 +391,7 @@ setInterval(() => {
 	});
 	io.emit('monstersUpdate', monsters_spawns);
 	
-}, 50);
+}, 10);
 
 setInterval(() => {
 	for (const id in projectiles) {
