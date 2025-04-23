@@ -333,39 +333,13 @@ io.on('connection', (socket) => {
 
 setInterval(() => {
 	
+	const state = {};
 	for (const id in players) {
-		const player = players[id];
-		const speed = 0.1;
-		const gravity = -0.05;
-		const jumpPower = 1;
-
-		let moveX = 0;
-		let moveZ = 0;
-
-		if (player.inputs.forward) moveZ -= speed;
-		if (player.inputs.backward) moveZ += speed;
-		if (player.inputs.left) moveX -= speed;
-		if (player.inputs.right) moveX += speed;
-
-		if (player.inputs.jump && !player.isJumping) {
-			player.velocityY = jumpPower;
-			player.isJumping = true;
-		}
-
-		player.velocityY += gravity;
-		player.position.y += player.velocityY;
-
-		if (player.position.y <= 0.6) {
-			player.position.y = 0.6;
-			player.velocityY = 0;
-			player.isJumping = false;
-		}
-
-		player.position.x += moveX;
-		player.position.z += moveZ;
+		state[id] = {
+			position: players[id].position
+		};
 	}
-
-	io.emit('playersStateUpdate', players);
+	io.emit('playersStateUpdate', state);
 	
 	const MAP_BOUND = 49;
 	monsters_spawns.forEach(monster => {
@@ -391,7 +365,7 @@ setInterval(() => {
 	});
 	io.emit('monstersUpdate', monsters_spawns);
 	
-}, 10);
+}, 50);
 
 setInterval(() => {
 	for (const id in projectiles) {
