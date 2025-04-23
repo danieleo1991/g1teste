@@ -323,7 +323,7 @@ io.on('connection', (socket) => {
 		
 		const start_position = {
 			x: players[socket.id].position.x,
-			y: players[socket.id].position.y + 3,
+			y: players[socket.id].position.y + 6,
 			z: players[socket.id].position.z
 		};
 
