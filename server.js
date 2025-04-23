@@ -337,10 +337,6 @@ io.on('connection', (socket) => {
 			skill_name: data.skill_name
 		};
 		
-		let FROMPLAYERPOS = target = players[socket.id].position.y;
-		let TOPLAYERPOS = target = players[data.target_id].position.y;
-		
-
 		projectiles[projectile.id] = projectile;
 		io.emit('use_skill', projectile);
 	});
@@ -457,7 +453,7 @@ setInterval(() => {
 		const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 		console.log(distance);
 		
-		if (distance < 0.6) {
+		if (distance < 3) {
 			
 			console.log("DYSTANS WYKRYTY");
 			
