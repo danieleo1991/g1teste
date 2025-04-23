@@ -139,13 +139,15 @@ io.on('connection', (socket) => {
 
 	socket.on('newPlayer', async (data) => {
 		
-		const result = await pool.query("SELECT hp, player_name FROM players WHERE id = $1", [data.id]);
+		const result = await pool.query("SELECT hp, player_name, attack, crit FROM players WHERE id = $1", [data.id]);
 		const player_name = result.rows[0]?.player_name;
 		players[socket.id] = {
 			id: socket.id,
 			position: data.position,
 			hp: result.rows[0]?.hp,
-			player_name: player_name
+			player_name: player_name,
+			attack: playerData?.attack ?? 10,
+			crit: playerData?.crit ?? 5
 		};
 		
 		socket.emit('currentPlayers', players);
@@ -325,7 +327,19 @@ setInterval(() => {
 			if (projectile.target_type == 'player') {
 				
 				const player = players[projectile.target_id];
-				player.hp = Math.max(0, player.hp - 10);
+				
+				const attacker = players[projectile.from];
+				const baseAttack = attacker?.attack ?? 10;
+				const critChance = attacker?.crit ?? 5;
+				let damage = Math.floor(baseAttack * (0.5 + Math.random() * 0.5));
+
+				if (Math.random() * 100 < critChance) {
+					damage *= 2;
+					console.log(`💥 CRIT! Obrażenia: ${damage}`);
+				}
+
+				player.hp = Math.max(0, player.hp - damage);
+				
 				pool.query('UPDATE players SET hp = $1 WHERE socket_id = $2', [
 					player.hp,
 					player.id
@@ -355,7 +369,7 @@ setInterval(() => {
 			io.emit('register_damage', {
 				target_id: projectile.target_id,
 				target_type: projectile.target_type,
-				damage: skills[projectile.skill_name]?.damage
+				damage: damage
 			});
 			
 			delete projectiles[id];
