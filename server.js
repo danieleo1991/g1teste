@@ -104,6 +104,11 @@ const monsters_spawns = [
 */
 const monsters_spawns = [];
 
+
+console.log("🧱 mapObjects załadowane:", mapObjects.length);
+const wallCount = mapObjects.filter(o => o.type === 'wall').length;
+console.log("🔳 Liczba ścian:", wallCount);
+
 function isLineObstructed(start, end) {
   const ray = new Raycaster();
   const direction = new Vector3(end.x - start.x, end.y - start.y, end.z - start.z).normalize();
