@@ -277,6 +277,7 @@ io.on('connection', (socket) => {
 				y: result.rows[0].y ?? 0.6,
 				z: result.rows[0].z ?? 0
 			},
+			level: result.rows[0]?.level,
 			hp: result.rows[0]?.hp,
 			player_name: player_name,
 			attack: result.rows[0]?.attack ?? 10,
