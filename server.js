@@ -96,12 +96,6 @@ const monsters = [
 const mapObjects = [
   {
     type: "wall",
-    position: { x: 0, y: 0, z: 0 },
-    size: { x: 4, y: 4, z: 0.5 },
-    color: 8947848
-  },
-  {
-    type: "wall",
     position: { x: 5, y: 0, z: 5 },
     size: { x: 4, y: 4, z: 0.5 },
     color: 8947848
@@ -160,7 +154,6 @@ function isLineObstructed(start, end) {
 		};
 
 		if (lineIntersectsBox(start, end, min, max)) {
-			console.log("💥 TRAFIONA kolizja z:", obj.position, obj.size);
 			return true;
 		}
 	}
@@ -179,9 +172,6 @@ function lineIntersectsBox(start, end, min, max) {
 	const check = (axis) => {
 		if (Math.abs(delta[axis]) < 1e-6) {
 			const inside = start[axis] >= min[axis] && start[axis] <= max[axis];
-			if (!inside) {
-				console.log(`❌ ${axis} poza zakresem: ${start[axis]} vs [${min[axis]}, ${max[axis]}]`);
-			}
 			return inside;
 		}
 		const ood = 1.0 / delta[axis];
@@ -194,9 +184,6 @@ function lineIntersectsBox(start, end, min, max) {
 	};
 
 	const result = check('x') && check('y') && check('z');
-	if (result) {
-		console.log("✅ TRAFIŁO W OBIEKT");
-	}
 	return result;
 }
 
@@ -496,7 +483,6 @@ setInterval(() => {
 			const obstructed = isLineObstructed(projectile.current_position, target.position);
 			
 			if (obstructed) {
-				console.log("❌ Zablokowany przez przeszkodę!");
 				io.emit('projectileHit', { projectileId: projectile.id });
 				delete projectiles[id];
 				continue;
