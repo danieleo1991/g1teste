@@ -534,6 +534,6 @@ setInterval(() => {
 			delete projectiles[id];
 		}
 	}
-}, 20);
+}, 18);
 
 server.listen(port);
